@@ -1,0 +1,8 @@
+{
+	"name": "prototype",
+	"description": "Web prototyping template.",
+	"version": "1.0.0",
+	"dependencies": {
+		"jquery": "latest"
+	}
+}

@@ -1,0 +1,7 @@
+.DS_Store
+.sass-cache
+.sass-cache/*
+builds
+resources/css/main.min.css
+resources/css/main.min.css.map
+resources/js/all.min.js

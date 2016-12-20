@@ -1,0 +1,22 @@
+{
+  "name": "prototype",
+  "version": "1.0.0",
+  "description": "Prototype boilerplate.",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/epassi/prototype.git"
+  },
+  "author": "Emilio Passi",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-browser-sync": "^2.2.0",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-contrib-sass": "^1.0.0",
+    "grunt-contrib-uglify": "^1.0.1",
+    "grunt-contrib-watch": "~1.0.0",
+    "jit-grunt": "~0.10.0"
+  },
+  "license": "MIT"
+}

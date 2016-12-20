@@ -1,0 +1,53 @@
+/*
+ * Base styles.
+ */
+
+html {
+	font-size: 62.5%;
+	// height: 100%;
+}
+
+body {
+	// height: 100%;
+	font-family: Helvetica, sans-serif;
+	font-weight: lighter;
+	font-size: 1.6rem;
+}
+
+th {
+	font-weight: bold;
+	text-align: left;
+}
+
+button {
+	border: none;
+	outline: none;
+	background: none;
+	padding: 0;
+	cursor: pointer;
+}
+
+input[type="radio"] {
+	-webkit-appearance: none;
+
+	& + label {
+		// display: inline-block;
+		float: left;
+		width: 4.0rem;
+		width: 100% * 1/16;
+		height: 100% * 1/16;
+		border-radius: 100%;
+		font-size: 1.2rem;
+		cursor: pointer;
+		text-align: center;
+		background: #eee;
+	}
+
+	&:checked + label {
+		background: #ccc;
+	}
+}
+
+
+
+

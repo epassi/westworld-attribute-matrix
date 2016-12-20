@@ -1,0 +1,54 @@
+// LAYOUT MODULES 
+//
+// Used only once for defining major structural elements of a page or spatial model.
+// They typically use ID selectors (#) instead of class selectors (.) except for grid classes.
+// Examples: headers, footers, sidebars, layers, grids.
+
+
+///////////////////////////////////////////////////////////////////////////////
+// Sample layout module 
+
+// Foundation classes 
+
+	#sample-layout-module {
+		// Foundation properties.
+		color: $color-medium;
+	}
+
+	#sample-layout-module.is-active {
+	}
+
+	@media (min-width: $vp-medium-min) {
+		#sample-layout-module {
+		}
+	}
+
+// Variation 1 
+
+	#sample-layout-module-variation-1 {
+		@extend #sample-layout-module;
+
+		// Variation 1 properties.
+	}
+
+	#sample-layout-module-variation-1.is-active {
+	}
+
+	@media (min-width: $vp-medium-min) {
+		#sample-layout-module-variation-1 {
+		}
+	}
+
+
+///////////////////////////////////////////////////////////////////////////////
+// Your layout module 
+
+// Foundation classes
+	// modules
+	// states
+	// media queries
+
+// Variations
+	// modules
+	// states
+	// media queries
