@@ -22,6 +22,8 @@ var Main = function() {
 
 	function init() {
 		$(document).ready(function() {
+			console.log("babelTestConstant = " + babelTestConstant);
+			
 			$map = $(".map");
 			$grabber = $(".grabber");
 			$angleInput = $(".angle-input");

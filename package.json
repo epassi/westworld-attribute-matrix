@@ -8,6 +8,7 @@
   },
   "author": "Emilio Passi",
   "devDependencies": {
+    "babel-preset-latest": "^6.16.0",
     "grunt": "^1.0.1",
     "grunt-babel": "^6.0.0",
     "grunt-browser-sync": "^2.2.0",
