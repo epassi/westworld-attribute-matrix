@@ -5,3 +5,6 @@ builds
 resources/css/main.min.css
 resources/css/main.min.css.map
 resources/js/all.min.js
+
+# Don't include transpiled ES6 files.
+*.es6.js*
