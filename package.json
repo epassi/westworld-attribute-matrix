@@ -8,7 +8,9 @@
   },
   "author": "Emilio Passi",
   "devDependencies": {
+    "babel-preset-latest": "^6.16.0",
     "grunt": "^1.0.1",
+    "grunt-babel": "^6.0.0",
     "grunt-browser-sync": "^2.2.0",
     "grunt-contrib-clean": "^1.0.0",
     "grunt-contrib-copy": "^1.0.0",
@@ -16,6 +18,7 @@
     "grunt-contrib-sass": "^1.0.0",
     "grunt-contrib-uglify": "^1.0.1",
     "grunt-contrib-watch": "~1.0.0",
+    "grunt-eslint": "^19.0.0",
     "jit-grunt": "~0.10.0"
   },
   "license": "MIT"

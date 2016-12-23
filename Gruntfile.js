@@ -22,7 +22,29 @@ module.exports = function(grunt) {
 		},
 		jshint: {
 			dev: ["resources/js/**/*.js", 
+				  "!resources/js/**/*.es6.js",
 				  "!resources/js/*.min.js"]
+		},
+		eslint: {
+			dev: {
+				options: {
+					configFile: 'eslint.json'
+				},
+				target: ["resources/js/**/*.es6"]
+			}
+		},
+		babel: {
+			dev: {
+				options: {
+					sourceMap: true,
+					presets: ["latest"]
+				},
+				files: [{
+					expand: true,
+					src: ["resources/js/**/*.es6"],
+					ext: ".es6.js"
+				}]
+			}
 		},
 		uglify: {
 			dev: {
@@ -90,6 +112,13 @@ module.exports = function(grunt) {
 					nospawn: true
 				}
 			},
+			es6: {
+				files: ["resources/js/**/*.es6"],
+				tasks: ["eslint:dev", "babel:dev", "uglify:dev", "clean:dev", "copy:dev"],
+				options: {
+					nospawn: true
+				}
+			},
 			js: {
 				files: ["resources/js/**/*.js", "Gruntfile.js"],
 				tasks: ["jshint:dev", "uglify:dev", "clean:dev", "copy:dev"],
@@ -116,12 +145,35 @@ module.exports = function(grunt) {
 
 	grunt.loadNpmTasks("grunt-contrib-sass");
 	grunt.loadNpmTasks("grunt-contrib-jshint");
+	grunt.loadNpmTasks("grunt-eslint");
+	grunt.loadNpmTasks("grunt-babel");
 	grunt.loadNpmTasks("grunt-contrib-uglify");
 	grunt.loadNpmTasks("grunt-contrib-copy");
 	grunt.loadNpmTasks("grunt-contrib-clean");
 	grunt.loadNpmTasks("grunt-contrib-watch");
 	grunt.loadNpmTasks("grunt-browser-sync");
 
-	grunt.registerTask("default", ["sass:dev", "jshint:dev", "uglify:dev", "clean:dev", "copy:dev", "browserSync", "watch"]);
-	grunt.registerTask("dev", ["sass:dev", "jshint:dev", "uglify:dev", "clean:dev", "copy:dev", "browserSync", "watch"]);
+	grunt.registerTask("default", [
+		"sass:dev",
+		"jshint:dev",
+		"eslint:dev",
+		"babel:dev",
+		"uglify:dev",
+		"clean:dev",
+		"copy:dev",
+		"browserSync",
+		"watch"
+	]);
+
+	grunt.registerTask("dev", [
+		"sass:dev",
+		"jshint:dev",
+		"eslint:dev",
+		"babel:dev",
+		"uglify:dev",
+		"clean:dev",
+		"copy:dev",
+		"browserSync",
+		"watch"
+	]);
 };
