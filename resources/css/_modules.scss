@@ -28,24 +28,15 @@
 	height: 2.0rem;
 	transform: translate(-50%, -50%);
 	cursor: -webkit-grab;
+	opacity: 0.6;
 }
 
-.angle-input {
-	display: block;
-	width: 50%;
-	margin: 2.0rem auto;
-}
+// .guide-marker {
+// 	width: 30%;
+// 	height: 2px;
+// 	transform: translate(0, 50%);
 
-.angle-output {
-	text-align: center;
-}
+// 	transform-origin: 0;
 
-.guide-marker {
-	width: 30%;
-	height: 2px;
-	transform: translate(0, 50%);
-
-	transform-origin: 0;
-
-	background: #ccc;
-}
+// 	background: #ccc;
+// }
