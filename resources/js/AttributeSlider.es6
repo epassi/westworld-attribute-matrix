@@ -1,23 +1,34 @@
 class AttributeSlider {
-	static dragDistance(drag) {
+
+	static distanceFromCenter(drag) {
 		// Pythagorean theorem calculates distance
 		// between chart center and drag position.
 		return Math.sqrt(Math.pow(drag.x, 2) + Math.pow(drag.y, 2));
 	}
 
-	constructor(chartSelector, sliderSelector, radius, angle) {
+	static get SIZE() {return 16;} // pixels
+
+	constructor(chartSelector, sliderID, radius, angle, value) {
 		this.$chart = $(chartSelector);
-		this.$slider = $(sliderSelector);
-		this._radius = 0; // set by setter
+		this.$chartGrid = $(`${chartSelector} .grid`);
+		this._radius = {}; // set by setter
 		this._angle = 0; // set by setter
 		this._dragging = false;
-		this._dragToRadiusRatio = 0; // for responsive positioning of slider 
+
+		// Create slider element.
+		this.$chartGrid.append(`<div class="slider" id="slider-${sliderID}"></div>`);
+		this.$slider = $(`#slider-${sliderID}`);
+		this.$slider.width(AttributeSlider.SIZE);
+		this.$slider.height(AttributeSlider.SIZE);
 
 		// Set initial radius.
 		this.radius = radius;
 
 		// Set initial angle.
 		this.angle = angle;
+
+		// Set initial value.
+		this.value = value;
 
 		// Capture start of slide.
 		this.$slider.on(`touchstart`, (event) => {
@@ -94,8 +105,8 @@ class AttributeSlider {
 			if (correctedDrag.y < 0) correctedDrag.y = 0;
 		} else if (this.angle > 90 && this.angle <= 180) {
 			// Quadrant II.
-			if (correctedDrag.x > 0)	correctedDrag.x = 0;
-			if (correctedDrag.y < 0)	correctedDrag.y = 0;
+			if (correctedDrag.x > 0) correctedDrag.x = 0;
+			if (correctedDrag.y < 0) correctedDrag.y = 0;
 		} else if (this.angle > 180 && this.angle <= 270) {
 			// Quadrant III.
 			if (correctedDrag.x > 0) correctedDrag.x = 0;
@@ -106,17 +117,25 @@ class AttributeSlider {
 			if (correctedDrag.y > 0) correctedDrag.y = 0;
 		}
 
-		// Don't drag past map radius.
-		if (AttributeSlider.dragDistance(correctedDrag) > this._radius) {
+		// Don't drag past min radius.
+		if (AttributeSlider.distanceFromCenter(correctedDrag) < this._radius.min) {
 			// If drag distance exceeds map radius,
 			// set slider position to map radius.
-			correctedDrag.x = this._radius * Math.cos(Math.radians(this.angle));
-			correctedDrag.y = this._radius * Math.sin(Math.radians(this.angle));
+			correctedDrag.x = this._radius.min * Math.cos(Math.radians(this.angle));
+			correctedDrag.y = this._radius.min * Math.sin(Math.radians(this.angle));
 		}
 
-		// Record drag-to-radius ratio for responsive positioning.
-		// Note: drag distance should be based on corrected drag WITHOUT slider offset. 
-		this._dragToRadiusRatio = AttributeSlider.dragDistance(correctedDrag) / this._radius;
+		// Don't drag past max radius.
+		if (AttributeSlider.distanceFromCenter(correctedDrag) > this._radius.max) {
+			// If drag distance exceeds map radius,
+			// set slider position to map radius.
+			correctedDrag.x = this._radius.max * Math.cos(Math.radians(this.angle));
+			correctedDrag.y = this._radius.max * Math.sin(Math.radians(this.angle));
+		}
+
+		// Set value.
+		let dragRadiusRatio = (AttributeSlider.distanceFromCenter(correctedDrag) - this._radius.min) / (this._radius.max - this._radius.min);
+		this._value = RadarChart.SCALE * dragRadiusRatio;
 
 		// Account for slider dimensions.
 		correctedDragWithOffset.x = correctedDrag.x - this.$slider.width()/2;
@@ -155,18 +174,32 @@ class AttributeSlider {
 
 		// Reset slider to center.
 		this.$slider.css(`transform`, ``);
-		this._dragToRadiusRatio = 0;
+		this.value = 0;
 	}
 
 	get radius() {
 		return this._radius;
 	}
 
-	set radius(length) {
-		this._radius = length;
+	set radius(radius) {
+		this._radius = radius;
+
+		// Reposition the slider.
+		this.value = this.value; 
+	}
+
+	get value() {
+		return this._value;
+	}
+
+	set value(value) {
+		this._value = value;
+
+		// Figure out value-to-scale ratio.
+		let valueScaleRatio = value / RadarChart.SCALE;
 
 		// Update slider position.
-		let newDragDistance = this._radius * this._dragToRadiusRatio;
+		let newDragDistance = (this._radius.max-this._radius.min) * valueScaleRatio + this._radius.min;
 
 		// Calculate new slider position.
 		let drag = {};
@@ -177,7 +210,7 @@ class AttributeSlider {
 		let transform = `translate(${drag.x}px, ${-drag.y}px)`;
 		this.$slider.css(`transform`, transform);
 	}
-
+	
 }
 
 
