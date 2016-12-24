@@ -48,13 +48,19 @@ class RadarChart {
 	}
 
 	setRadius() {
-		// Set radius (range) based on chart's smallest dimension.
+		// There are two radii: min (inner) and max (outer).
+		// The max radius represents the highest attribute value.
+		// The min radius represents the lowest attribute value (0) and
+		// is away from the center to minimize colliding sliders with low values.
+
+		// Set max radius based on chart's smallest dimension.
 		if (this.$chart.width() > this.$chart.height()) {
 			this._radius.max = this.$chart.height()/2 - AttributeSlider.SIZE/2;
 		} else {
 			this._radius.max = this.$chart.width()/2 - AttributeSlider.SIZE/2;
 		}
 
+		// Set min radius proportionally to max radius.
 		this._radius.min = this._radius.max * RadarChart.MIN_RADIUS_RATIO;
 
 		// Update attribute sliders' radius.
