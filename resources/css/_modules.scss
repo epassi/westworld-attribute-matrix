@@ -1,7 +1,8 @@
 .chart {
-	margin: 2.0rem auto;
-	width: 50%;
-	height: 50.0rem;
+	margin: 0 auto;
+	width: 100%;
+	// height: 50.0rem;
+	height: 100%;
 	background: #eee;
 	overflow: hidden; // to hide offset grid
 
@@ -21,30 +22,22 @@
 }
 
 .slider {
+	position: absolute;
 	border-radius: 100%;
 	background: #20beef;
 	width: 2.0rem;
 	height: 2.0rem;
 	transform: translate(-50%, -50%);
 	cursor: -webkit-grab;
+	opacity: 0.6;
 }
 
-.angle-input {
-	display: block;
-	width: 50%;
-	margin: 2.0rem auto;
-}
+// .guide-marker {
+// 	width: 30%;
+// 	height: 2px;
+// 	transform: translate(0, 50%);
 
-.angle-output {
-	text-align: center;
-}
+// 	transform-origin: 0;
 
-.guide-marker {
-	width: 30%;
-	height: 2px;
-	transform: translate(0, 50%);
-
-	transform-origin: 0;
-
-	background: #ccc;
-}
+// 	background: #ccc;
+// }
