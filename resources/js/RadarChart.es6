@@ -2,6 +2,7 @@ class RadarChart {
 
 	static get SCALE() {return 20;} // "points" in Westworld terms
 	static get MIN_RADIUS_RATIO() {return 0.2;}
+	static get MAX_RADIUS_RATIO() {return 0.7;}
 
 	constructor(chartSelector, hostProfile) {
 		this.$chart = $(chartSelector);
@@ -59,6 +60,10 @@ class RadarChart {
 		} else {
 			this._radius.max = this.$chart.width()/2 - AttributeSlider.SIZE/2;
 		}
+
+		// To make room for attribute labels,
+		// reduce max radius a little.
+		this._radius.max *= RadarChart.MAX_RADIUS_RATIO;
 
 		// Set min radius proportionally to max radius.
 		this._radius.min = this._radius.max * RadarChart.MIN_RADIUS_RATIO;
