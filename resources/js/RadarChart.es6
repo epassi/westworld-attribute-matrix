@@ -91,12 +91,21 @@ class RadarChart {
 		let ringInterval = (this._radius.max - this._radius.min) / RadarChart.SCALE;
 		for (let i = 0; i <= RadarChart.SCALE; i++) {
 			let ring = this._svg.circle(this.$chart.width()/2, this.$chart.height()/2, this._radius.min+ringInterval*i);
-			ring.attr({
+			let attr = {
 				fill: "none",
 				stroke: "#fff",
 				opacity: 0.05,
 				strokeWidth: 1
-			});
+			};
+
+			// Innermost ring has a wider stroke.
+			if (i == 0) {
+				attr.strokeWidth = 2;
+				attr.opacity = 1;
+				attr.stroke = "#666";
+			}
+
+			ring.attr(attr);
 		}
 
 		// Figure out slider angle interval.
@@ -114,8 +123,8 @@ class RadarChart {
 
 			// Calculate track start and end points.
 			let trackStart = {
-				x: this.$chart.width()/2, 
-				y: this.$chart.height()/2
+				x: this._radius.min * Math.cos(Math.radians(correctedAngle)) + this.$chart.width()/2, 
+				y: this._radius.min * Math.sin(Math.radians(correctedAngle)) + this.$chart.height()/2
 			}
 			let trackEnd = {
 				x: this._radius.max * Math.cos(Math.radians(correctedAngle)) + this.$chart.width()/2,
@@ -138,9 +147,8 @@ class RadarChart {
 			// Draw terminal.
 			let terminal = this._svg.circle(trackEnd.x, trackEnd.y, AttributeSlider.SIZE/2);
 			terminal.attr({
-				fill: "none",
-				stroke: "#fff",
-				opacity: 0.3,
+				fill: "#333",
+				stroke: "#666",
 				strokeWidth: 2
 			});
 		}
