@@ -109,14 +109,14 @@ class RadarChart {
 		}
 
 		// Figure out slider angle interval.
-		// Sliders are arranged clockwise starting at the 12:00 position (90°). 
-		let angleStart = 90; // degrees
+		// Sliders are arranged clockwise starting at the 12:00 position (270°). 
+		let angleStart = 270; // degrees
 		let angleInterval = 360 / this._attributes.length; // degrees
 
 		// Draw slider tracks and terminals.
 		for (let [index, attribute] of this._attributes.entries()) {
-			// Calculate angle starting from 12:00 (90°) position.
-			let angle = angleStart - index*angleInterval;
+			// Calculate angle starting from 12:00 (270°) position.
+			let angle = angleStart + index*angleInterval;
 
 			// Ensure angle is a value between 0-359.
 			let correctedAngle = (angle+360) % 360;
