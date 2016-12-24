@@ -51,6 +51,7 @@ module.exports = function(grunt) {
 				files: {
 					"resources/js/all.min.js": [
 						"vendor/jquery/dist/jquery.min.js",
+						"vendor/Snap.svg/dist/snap.svg-min.js",
 						"resources/js/**/*.js", 
 						"!resources/js/all.min.js"]
 				}
