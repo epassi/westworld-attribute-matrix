@@ -36,9 +36,6 @@ class RadarChart {
 			// Ensure angle is a value between 0-359.
 			let correctedAngle = (angle+360) % 360;
 
-			// Calculate slider fullness (radius ratio).
-			// let fullness = attribute.amount / RadarChart.SCALE;
-
 			// Create slider.
 			this._sliders.push(new AttributeSlider(
 				`.chart`,
