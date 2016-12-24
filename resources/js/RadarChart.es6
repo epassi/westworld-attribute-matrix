@@ -93,7 +93,7 @@ class RadarChart {
 			let ring = this._svg.circle(this.$chart.width()/2, this.$chart.height()/2, this._radius.min+ringInterval*i);
 			ring.attr({
 				fill: "none",
-				stroke: "#000",
+				stroke: "#fff",
 				opacity: 0.1,
 				strokeWidth: 1
 			});

@@ -1,9 +1,11 @@
+.delos-app {
+	background: #333;
+}
+
 .chart {
 	margin: 0 auto;
 	width: 100%;
-	// height: 50.0rem;
 	height: 100%;
-	background: #eee;
 	overflow: hidden; // to hide offset grid
 
 	.grid {
