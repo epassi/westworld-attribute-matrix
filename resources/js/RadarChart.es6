@@ -24,11 +24,11 @@ class RadarChart {
 			this.setRadius();
 		});
 
-		// Draw guide rings.
+		// Draw guides.
 		this._svg = new Snap(`.guides`);
-		this.drawRings();
+		this.drawGuides();
 		$(window).resize((event) => {
-			this.drawRings();
+			this.drawGuides();
 		});
 
 
@@ -84,18 +84,72 @@ class RadarChart {
 		}
 	}
 
-	drawRings() {		
-		let ringInterval = (this._radius.max - this._radius.min) / RadarChart.SCALE;
-
+	drawGuides() {		
 		this._svg.clear();
 
+		// Draw scale rings.
+		let ringInterval = (this._radius.max - this._radius.min) / RadarChart.SCALE;
 		for (let i = 0; i <= RadarChart.SCALE; i++) {
 			let ring = this._svg.circle(this.$chart.width()/2, this.$chart.height()/2, this._radius.min+ringInterval*i);
-			ring.attr({
+			let attr = {
 				fill: "none",
 				stroke: "#fff",
-				opacity: 0.1,
+				opacity: 0.05,
 				strokeWidth: 1
+			};
+
+			// Innermost ring has a wider stroke.
+			if (i == 0) {
+				attr.strokeWidth = 2;
+				attr.opacity = 1;
+				attr.stroke = "#666";
+			}
+
+			ring.attr(attr);
+		}
+
+		// Figure out slider angle interval.
+		// Sliders are arranged clockwise starting at the 12:00 position (270°). 
+		let angleStart = 270; // degrees
+		let angleInterval = 360 / this._attributes.length; // degrees
+
+		// Draw slider tracks and terminals.
+		for (let [index, attribute] of this._attributes.entries()) {
+			// Calculate angle starting from 12:00 (270°) position.
+			let angle = angleStart + index*angleInterval;
+
+			// Ensure angle is a value between 0-359.
+			let correctedAngle = (angle+360) % 360;
+
+			// Calculate track start and end points.
+			let trackStart = {
+				x: this._radius.min * Math.cos(Math.radians(correctedAngle)) + this.$chart.width()/2, 
+				y: this._radius.min * Math.sin(Math.radians(correctedAngle)) + this.$chart.height()/2
+			}
+			let trackEnd = {
+				x: this._radius.max * Math.cos(Math.radians(correctedAngle)) + this.$chart.width()/2,
+				y: this._radius.max * Math.sin(Math.radians(correctedAngle)) + this.$chart.height()/2
+			}
+
+			// Draw track.
+			let sliderTrack = this._svg.line(
+				trackStart.x,
+				trackStart.y,
+				trackEnd.x,
+				trackEnd.y
+			);
+			sliderTrack.attr({
+				stroke: "#fff",
+				opacity: 0.1,
+				strokeWidth: 2
+			});
+
+			// Draw terminal.
+			let terminal = this._svg.circle(trackEnd.x, trackEnd.y, AttributeSlider.SIZE/2);
+			terminal.attr({
+				fill: "#333",
+				stroke: "#666",
+				strokeWidth: 2
 			});
 		}
 	}
