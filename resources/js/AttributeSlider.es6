@@ -1,23 +1,37 @@
 class AttributeSlider {
+
 	static dragDistance(drag) {
 		// Pythagorean theorem calculates distance
 		// between chart center and drag position.
 		return Math.sqrt(Math.pow(drag.x, 2) + Math.pow(drag.y, 2));
 	}
 
-	constructor(chartSelector, sliderSelector, radius, angle) {
+	static get SIZE() {
+		return 16;
+	}
+
+	constructor(chartSelector, sliderID, radius, angle, fullness) {
 		this.$chart = $(chartSelector);
-		this.$slider = $(sliderSelector);
+		this.$chartGrid = $(`${chartSelector} .grid`);
 		this._radius = 0; // set by setter
 		this._angle = 0; // set by setter
 		this._dragging = false;
-		this._dragToRadiusRatio = 0; // for responsive positioning of slider 
+		this._dragRadiusRatio = 0; // for responsive positioning of slider 
+
+		// Create slider element.
+		this.$chartGrid.append(`<div class="slider" id="slider-${sliderID}"></div>`);
+		this.$slider = $(`#slider-${sliderID}`);
+		this.$slider.width(AttributeSlider.SIZE);
+		this.$slider.height(AttributeSlider.SIZE);
 
 		// Set initial radius.
 		this.radius = radius;
 
 		// Set initial angle.
 		this.angle = angle;
+
+		// Set initial fullness (drag-to-radius ratio).
+		this.fullness = fullness;
 
 		// Capture start of slide.
 		this.$slider.on(`touchstart`, (event) => {
@@ -116,7 +130,7 @@ class AttributeSlider {
 
 		// Record drag-to-radius ratio for responsive positioning.
 		// Note: drag distance should be based on corrected drag WITHOUT slider offset. 
-		this._dragToRadiusRatio = AttributeSlider.dragDistance(correctedDrag) / this._radius;
+		this._dragRadiusRatio = AttributeSlider.dragDistance(correctedDrag) / this._radius;
 
 		// Account for slider dimensions.
 		correctedDragWithOffset.x = correctedDrag.x - this.$slider.width()/2;
@@ -155,7 +169,7 @@ class AttributeSlider {
 
 		// Reset slider to center.
 		this.$slider.css(`transform`, ``);
-		this._dragToRadiusRatio = 0;
+		this._dragRadiusRatio = 0;
 	}
 
 	get radius() {
@@ -166,7 +180,7 @@ class AttributeSlider {
 		this._radius = length;
 
 		// Update slider position.
-		let newDragDistance = this._radius * this._dragToRadiusRatio;
+		let newDragDistance = this._radius * this._dragRadiusRatio;
 
 		// Calculate new slider position.
 		let drag = {};
@@ -178,6 +192,26 @@ class AttributeSlider {
 		this.$slider.css(`transform`, transform);
 	}
 
+	get fullness() {
+		return this._dragRadiusRatio;
+	}
+
+	set fullness(dragRadiusRatio) {
+		this._dragRadiusRatio = dragRadiusRatio;
+
+		// Update slider position.
+		let newDragDistance = this._radius * this._dragRadiusRatio;
+
+		// Calculate new slider position.
+		let drag = {};
+		drag.x = newDragDistance * Math.cos(Math.radians(this.angle)) - this.$slider.width()/2;
+		drag.y = newDragDistance * Math.sin(Math.radians(this.angle)) + this.$slider.height()/2;
+
+		// Set slider position.
+		let transform = `translate(${drag.x}px, ${-drag.y}px)`;
+		this.$slider.css(`transform`, transform);
+	}
+	
 }
 
 

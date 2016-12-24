@@ -1,81 +1,32 @@
 // Unexpected challenges:
-// - Biasing to a vertical or horizontal axis.
-// - Ensuring slider doesn't exceed radius.
-// - Dynamically sizing the map. Making the slider responsive.
+
+// 0.0 Biasing to a vertical or horizontal axis.
+// 0.0 Ensuring slider doesn't exceed radius.
+// 0.0 Dynamically sizing the map. Making the slider responsive.
+
+// 0.1 ES6 integration took longer than I thought. Still unable to get ESLint to work.
+
+// 0.2 Now that we're building the actual chart, needed to think about a data-driven model.
+//     Recreated the attribute grouping from Westworld as a JSON file.
+// 0.2 Per Westworld design, slider 0 value starts a little further out from center.
+//     Max radius also leaves room for attribute labels on the sides.
+
 
 // Fun facts:
 // - The most triangle math I've ever used in a single program:
 //   sin, cos, tan, Pythagorean theorem.
+// - First time using ES6.
 
 
-let $chart;
-let $slider;
-let $angleInput;
-let $angleOutput;
-let $guideMarker;
-
-let _radius = 0; // set by chart
-let _angle = 0; // degrees
-let _attributeSlider = {};
+let _chart = {};
 
 let init = () => {
 	$(document).ready(() => {
-		$chart = $(`.chart`);
-		$slider = $(`.slider`);
-		$angleInput = $(`.angle-input`);
-		$angleOutput = $(`.angle-output`);
-		$guideMarker = $(`.guide-marker`);
-
-
-		// Set radius (range) based on map's smallest dimension.
-		updateRadius();
-		$(window).resize((event) => {
-			updateRadius();
-		});
-
-		// Set initial angle.
-		updateAngle();
-
-		// Create the slider.
-		_attributeSlider = new AttributeSlider(`.chart`, `.slider`, _radius, _angle);
-
-		// Update angle when slider changes.
-		$angleInput.on(`input`, (event) => {
-			updateAngle();
+		// Get host profile and create the chart.
+		$.getJSON("resources/data/host-profile.json", (hostProfile) => {
+			_chart = new RadarChart(`.chart`, hostProfile);
 		});
 	});
 }
 
-let updateAngle = () => {
-	// Get angle from HTML slider.
-	_angle = $angleInput[0].value;
-
-	// Update angle output.
-	$angleOutput.text(`${Math.round(_angle)}°`);
-
-	// Rotate the guide marker.
-	let transform = `rotate(${-_angle}deg)`;
-	$guideMarker.css(`transform`, transform);
-
-	// Update attribute slider angle.
-	_attributeSlider.angle = _angle;
-}
-
-let updateRadius = () => {
-	// Set radius (range) based on chart's smallest dimension.
-	if ($chart.width() > $chart.height()) {
-		_radius = $chart.height()/2 - $slider.width()/2;
-	} else {
-		_radius = $chart.width()/2 - $slider.height()/2;
-	}
-
-	// Update guide length.
-	$guideMarker.width(_radius);
-
-	// Update attribute slider radius.
-	_attributeSlider.radius = _radius;
-}
-
-
 init();
-
