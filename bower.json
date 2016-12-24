@@ -1,8 +1,11 @@
 {
-	"name": "prototype",
-	"description": "Web prototyping template.",
-	"version": "1.0.0",
-	"dependencies": {
-		"jquery": "latest"
-	}
+  "name": "prototype",
+  "description": "Web prototyping template.",
+  "version": "1.0.0",
+  "dependencies": {
+    "jquery": "latest"
+  },
+  "devDependencies": {
+    "Snap.svg": "snap.svg#^0.4.1"
+  }
 }
