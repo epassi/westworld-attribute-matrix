@@ -1,8 +1,8 @@
 class RadarChart {
 
 	static get SCALE() {return 20;} // "points" in Westworld terms
-	static get MIN_RADIUS_RATIO() {return 0.2;}
-	static get MAX_RADIUS_RATIO() {return 0.7;}
+	static get MIN_RADIUS_RATIO() {return 0.1;}
+	static get MAX_RADIUS_RATIO() {return 0.9;}
 
 	constructor(chartSelector, hostProfile) {
 		this.$chart = $(chartSelector);
@@ -10,6 +10,7 @@ class RadarChart {
 		this._firstName = hostProfile.firstName;
 		this._lastName = hostProfile.lastName;
 		this._radius = {}; // min and max
+		this._svg = {};
 
 		// The host profile data structure stays true to Westworld's attribute grouping,
 		// but this interactive model will only let you look at the first group.
@@ -23,11 +24,20 @@ class RadarChart {
 			this.setRadius();
 		});
 
+		// Draw guide rings.
+		this._svg = new Snap(`.guides`);
+		this.drawRings();
+		$(window).resize((event) => {
+			this.drawRings();
+		});
+
+
 		// Figure out slider angle interval.
 		// Sliders are arranged clockwise starting at the 12:00 position (90°). 
 		let angleStart = 90; // degrees
 		let angleInterval = 360 / this._attributes.length; // degrees
 
+		// Add sliders.
 		for (let [index, attribute] of this._attributes.entries()) {
 			console.log(`${attribute.name} = ${attribute.amount}`);
 
@@ -71,6 +81,22 @@ class RadarChart {
 		// Update attribute sliders' radius.
 		for (let slider of this._sliders) {
 			slider.radius = this._radius;
+		}
+	}
+
+	drawRings() {		
+		let ringInterval = (this._radius.max - this._radius.min) / RadarChart.SCALE;
+
+		this._svg.clear();
+
+		for (let i = 0; i <= RadarChart.SCALE; i++) {
+			let ring = this._svg.circle(this.$chart.width()/2, this.$chart.height()/2, this._radius.min+ringInterval*i);
+			ring.attr({
+				fill: "none",
+				stroke: "#000",
+				opacity: 0.1,
+				strokeWidth: 1
+			});
 		}
 	}
 
