@@ -6,7 +6,7 @@ class AttributeSlider {
 		return Math.sqrt(Math.pow(drag.x, 2) + Math.pow(drag.y, 2));
 	}
 
-	static get SIZE() {return 16;} // pixels
+	static get SIZE() {return 30;} // pixels
 
 	constructor(chartSelector, sliderID, radius, angle, value) {
 		this.$chart = $(chartSelector);
@@ -32,6 +32,7 @@ class AttributeSlider {
 
 		// Capture start of slide.
 		this.$slider.on(`touchstart`, (event) => {
+			event.preventDefault();
 			this.onGrab({
 				x: this.$slider.position().left - this.$chart.width()/2 + this.$slider.width()/2,
 				y: this.$slider.position().top - this.$chart.height()/2 + this.$slider.height()/2
@@ -46,6 +47,7 @@ class AttributeSlider {
 
 		// Drag slider across chart.
 		this.$chart.on(`touchmove`, (event) => {
+			event.preventDefault();
 			this.onDrag(this.chartPosition({
 				x: event.touches[0].pageX,
 				y: event.touches[0].pageY
@@ -60,6 +62,7 @@ class AttributeSlider {
 
 		// Capture end of slide.
 		this.$chart.on(`touchend`, (event) => {
+			event.preventDefault();
 			this.onDrop();
 		});
 		this.$chart.on(`mouseup`, (event) => {
