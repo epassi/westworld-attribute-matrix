@@ -7,6 +7,7 @@ class AttributeSlider {
 	}
 
 	static get SIZE() {return 30;} // pixels
+	static get SLIDE_EVENT() {return `slide`;};
 
 	constructor(chartSelector, sliderID, radius, angle, value) {
 		this.$chart = $(chartSelector);
@@ -14,6 +15,7 @@ class AttributeSlider {
 		this._radius = {}; // set by setter
 		this._angle = 0; // set by setter
 		this._dragging = false;
+		this._vertex = {x:0, y:0};
 
 		// Create slider element.
 		this.$chartGrid.append(`<div class="slider" id="slider-${sliderID}"></div>`);
@@ -140,6 +142,9 @@ class AttributeSlider {
 		let dragRadiusRatio = (AttributeSlider.distanceFromCenter(correctedDrag) - this._radius.min) / (this._radius.max - this._radius.min);
 		this._value = RadarChart.SCALE * dragRadiusRatio;
 
+		// Set vertex.
+		this._vertex = correctedDrag;
+
 		// Account for slider dimensions.
 		correctedDragWithOffset.x = correctedDrag.x - this.$slider.width()/2;
 		correctedDragWithOffset.y = correctedDrag.y + this.$slider.height()/2;
@@ -147,6 +152,11 @@ class AttributeSlider {
 		// Set slider position.
 		let transform = `translate(${correctedDragWithOffset.x}px, ${-correctedDragWithOffset.y}px)`;
 		this.$slider.css(`transform`, transform);
+
+		// Dispatch slide event.
+		// let slideEvent = new CustomEvent(AttributeSlider.SLIDE_EVENT);
+		// this.$slider.element[0].dispatchEvent(slideEvent);
+		this.$slider.trigger(AttributeSlider.SLIDE_EVENT);
 	}
 
 	onDrop(drop) {
@@ -205,13 +215,27 @@ class AttributeSlider {
 		let newDragDistance = (this._radius.max-this._radius.min) * valueScaleRatio + this._radius.min;
 
 		// Calculate new slider position.
-		let drag = {};
-		drag.x = newDragDistance * Math.cos(Math.radians(this.angle)) - this.$slider.width()/2;
-		drag.y = newDragDistance * Math.sin(Math.radians(this.angle)) + this.$slider.height()/2;
+		let drag = {
+			x: newDragDistance * Math.cos(Math.radians(this.angle)),
+			y: newDragDistance * Math.sin(Math.radians(this.angle))
+		};
+
+		// Set vertex.
+		this._vertex = drag;
+
+		// Account for slider dimensions.
+		let dragWithOffset = {
+			x: drag.x - this.$slider.width()/2,
+			y: drag.y + this.$slider.height()/2
+		};
 
 		// Set slider position.
-		let transform = `translate(${drag.x}px, ${-drag.y}px)`;
+		let transform = `translate(${dragWithOffset.x}px, ${-dragWithOffset.y}px)`;
 		this.$slider.css(`transform`, transform);
+	}
+
+	get vertex() {
+		return this._vertex;
 	}
 	
 }

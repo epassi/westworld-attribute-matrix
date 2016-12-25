@@ -11,6 +11,7 @@ class RadarChart {
 		this._lastName = hostProfile.lastName;
 		this._radius = {}; // min and max
 		this._svg = {};
+		this._vertices = [];
 
 		// The host profile data structure stays true to Westworld's attribute grouping,
 		// but this interactive model will only let you look at the first group.
@@ -48,13 +49,23 @@ class RadarChart {
 			let correctedAngle = (angle+360) % 360;
 
 			// Create slider.
-			this._sliders.push(new AttributeSlider(
+			let slider = new AttributeSlider(
 				`.chart`,
 				index,
 				this._radius,
 				correctedAngle,
 				attribute.amount
-			));
+			);
+			this._sliders.push(slider);
+			this._vertices[index] = [slider.vertex.x, slider.vertex.y];
+
+			// Listen for changes to slider.
+			// Record new vertex for drawing star.
+			$(`#slider-${index}`).on(AttributeSlider.SLIDE_EVENT, (event) => {
+				let sliderID = event.target.id.split(`-`)[1];
+				let vertex = this._sliders[sliderID].vertex;
+				this._vertices[sliderID] = [vertex.x, vertex.y];
+			});
 		}
 	}
 
