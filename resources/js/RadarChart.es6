@@ -10,7 +10,8 @@ class RadarChart {
 		this._firstName = hostProfile.firstName;
 		this._lastName = hostProfile.lastName;
 		this._radius = {}; // min and max
-		this._svg = {};
+		this._svgGuides = {};
+		this._svgStar = {};
 		this._vertices = [];
 
 		// The host profile data structure stays true to Westworld's attribute grouping,
@@ -26,7 +27,7 @@ class RadarChart {
 		});
 
 		// Draw guides.
-		this._svg = new Snap(`.guides`);
+		this._svgGuides = new Snap(`.guides`);
 		this.drawGuides();
 		$(window).resize((event) => {
 			this.drawGuides();
@@ -65,8 +66,16 @@ class RadarChart {
 				let sliderID = event.target.id.split(`-`)[1];
 				let vertex = this._sliders[sliderID].vertex;
 				this._vertices[sliderID] = [vertex.x, vertex.y];
+				this.drawStar();
 			});
 		}
+
+		// Draw star.
+		this._svgStar = new Snap(`.star`);
+		this.drawStar();
+		$(window).resize((event) => {
+			this.drawStar();
+		});
 	}
 
 	setRadius() {
@@ -96,12 +105,12 @@ class RadarChart {
 	}
 
 	drawGuides() {		
-		this._svg.clear();
+		this._svgGuides.clear();
 
 		// Draw scale rings.
 		let ringInterval = (this._radius.max - this._radius.min) / RadarChart.SCALE;
 		for (let i = 0; i <= RadarChart.SCALE; i++) {
-			let ring = this._svg.circle(this.$chart.width()/2, this.$chart.height()/2, this._radius.min+ringInterval*i);
+			let ring = this._svgGuides.circle(this.$chart.width()/2, this.$chart.height()/2, this._radius.min+ringInterval*i);
 			let attr = {
 				fill: "none",
 				stroke: "#fff",
@@ -143,7 +152,7 @@ class RadarChart {
 			}
 
 			// Draw track.
-			let sliderTrack = this._svg.line(
+			let sliderTrack = this._svgGuides.line(
 				trackStart.x,
 				trackStart.y,
 				trackEnd.x,
@@ -156,13 +165,25 @@ class RadarChart {
 			});
 
 			// Draw terminal.
-			let terminal = this._svg.circle(trackEnd.x, trackEnd.y, AttributeSlider.SIZE/2);
+			let terminal = this._svgGuides.circle(trackEnd.x, trackEnd.y, AttributeSlider.SIZE/2);
 			terminal.attr({
 				fill: "#333",
 				stroke: "#666",
 				strokeWidth: 2
 			});
 		}
+	}
+
+	drawStar() {
+		this._svgStar.clear();
+		
+		let star = this._svgStar.polyline( [].concat.apply([],this._vertices) );
+		star.attr({
+			stroke: "#20beef",
+			opacity: 0.5,
+			fill: "none",
+			strokeWidth: 2
+		});
 	}
 
 }
