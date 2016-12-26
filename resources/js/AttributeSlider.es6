@@ -53,13 +53,13 @@ class AttributeSlider {
 		// Drag slider across chart.
 		this.$chart.on(`touchmove`, (event) => {
 			event.preventDefault();
-			this.onDrag(this.parentChart.chartPosition({
+			this.onDrag(this.parentChart.getPointFromCenter({
 				x: event.touches[0].pageX,
 				y: event.touches[0].pageY
 			}));
 		});
 		this.$chart.on(`mousemove`, (event) => {
-			this.onDrag(this.parentChart.chartPosition({
+			this.onDrag(this.parentChart.getPointFromCenter({
 				x: event.pageX,
 				y: event.pageY
 			}));
@@ -219,7 +219,7 @@ class AttributeSlider {
 		// Set slider position.
 		let transform = `translate(${dragWithOffset.x}px, ${-dragWithOffset.y}px)`;
 		this.$slider.css(`transform`, transform);
-		
+
 		// Dispatch slide event.
 		this.$slider.trigger(AttributeSlider.SLIDE_EVENT);
 	}

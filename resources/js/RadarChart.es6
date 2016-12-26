@@ -57,14 +57,14 @@ class RadarChart {
 				attribute.amount
 			);
 			this._sliders.push(slider);
-			let svgVertex = this.svgPosition(slider.vertex);
+			let svgVertex = this.getPointFromCorner(slider.vertex);
 			this._vertices[index] = [svgVertex.x, svgVertex.y];
 
 			// Listen for changes to slider.
 			// Record new vertex for drawing star.
 			$(`#slider-${index}`).on(AttributeSlider.SLIDE_EVENT, (event) => {
 				let sliderID = event.target.id.split(`-`)[1];
-				let vertex = this.svgPosition(this._sliders[sliderID].vertex);
+				let vertex = this.getPointFromCorner(this._sliders[sliderID].vertex);
 				this._vertices[sliderID] = [vertex.x, vertex.y];
 				this.drawStar();
 			});
@@ -82,24 +82,17 @@ class RadarChart {
 		return this.$chart;
 	}
 
-	chartPosition(screenPosition) {
+	getPointFromCenter(pointFromScreenCorner) {
 		return {
-			x: screenPosition.x - this.$chart.offset().left - this.$chart.width()/2,
-			y: -1 * (screenPosition.y - this.$chart.offset().top - this.$chart.height()/2)
+			x: pointFromScreenCorner.x - this.$chart.offset().left - this.$chart.width()/2,
+			y: -1 * (pointFromScreenCorner.y - this.$chart.offset().top - this.$chart.height()/2)
 		};
 	}
 
-	screenPosition(chartPosition) {
+	getPointFromCorner(pointFromCenter) {
 		return {
-			x: chartPosition.x + this.$chart.offset().left + this.$chart.width()/2,
-			y: -1 * (chartPosition.y + this.$chart.offset().top + this.$chart.height()/2)
-		};
-	}
-
-	svgPosition(chartPosition) {
-		return {
-			x: chartPosition.x + this.$chart.width()/2,
-			y: -chartPosition.y + this.$chart.height()/2
+			x: pointFromCenter.x + this.$chart.width()/2,
+			y: -pointFromCenter.y + this.$chart.height()/2
 		};
 	}
 
