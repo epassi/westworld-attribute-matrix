@@ -3,6 +3,7 @@
 }
 
 .chart {
+	position: relative;
 	margin: 0 auto;
 	width: 100%;
 	height: 100%;
@@ -34,12 +35,20 @@
 	opacity: 0.6;
 }
 
-.guides,
-.star {
+.rendering {
 	position: absolute;
-	z-index: 0;
 	width: 100%;
 	height: 100%;
 	top: 0;
 	left: 0;
+}
+
+.guides {
+	@extend .rendering;
+	// z-index: 100;
+}
+
+.star {
+	@extend .rendering;
+	// z-index: 200;
 }

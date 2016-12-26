@@ -6,12 +6,14 @@ class AttributeSlider {
 		return Math.sqrt(Math.pow(drag.x, 2) + Math.pow(drag.y, 2));
 	}
 
-	static get SIZE() {return 30;} // pixels
+	static get SIZE() {return 16;} // pixels
 	static get SLIDE_EVENT() {return `slide`;};
 
-	constructor(chartSelector, sliderID, radius, angle, value) {
-		this.$chart = $(chartSelector);
-		this.$chartGrid = $(`${chartSelector} .grid`);
+	// constructor(chartSelector, parentChart, sliderID, radius, angle, value) {
+	constructor(parentChart, sliderID, angle, value) {
+		this.parentChart = parentChart;
+		this.$chart = parentChart.$element;
+		this.$chartGrid = this.$chart.find(`.grid`);
 		this._radius = {}; // set by setter
 		this._angle = 0; // set by setter
 		this._dragging = false;
@@ -24,7 +26,8 @@ class AttributeSlider {
 		this.$slider.height(AttributeSlider.SIZE);
 
 		// Set initial radius.
-		this.radius = radius;
+		// this.radius = radius;
+		this.radius = this.parentChart.radius;
 
 		// Set initial angle.
 		this.angle = angle;
@@ -50,13 +53,13 @@ class AttributeSlider {
 		// Drag slider across chart.
 		this.$chart.on(`touchmove`, (event) => {
 			event.preventDefault();
-			this.onDrag(this.chartPosition({
+			this.onDrag(this.parentChart.chartPosition({
 				x: event.touches[0].pageX,
 				y: event.touches[0].pageY
 			}));
 		});
 		this.$chart.on(`mousemove`, (event) => {
-			this.onDrag(this.chartPosition({
+			this.onDrag(this.parentChart.chartPosition({
 				x: event.pageX,
 				y: event.pageY
 			}));
@@ -154,28 +157,12 @@ class AttributeSlider {
 		this.$slider.css(`transform`, transform);
 
 		// Dispatch slide event.
-		// let slideEvent = new CustomEvent(AttributeSlider.SLIDE_EVENT);
-		// this.$slider.element[0].dispatchEvent(slideEvent);
 		this.$slider.trigger(AttributeSlider.SLIDE_EVENT);
 	}
 
 	onDrop(drop) {
 		this._dragging = false;
 		this.$chart.removeClass(`is-dragging`);
-	}
-
-	chartPosition(screenPosition) {
-		return {
-			x: screenPosition.x - this.$chart.offset().left - this.$chart.width()/2,
-			y: -1 * (screenPosition.y - this.$chart.offset().top - this.$chart.height()/2)
-		};
-	}
-
-	screenPosition(chartPosition) {
-		return {
-			x: chartPosition.x + this.$chart.offset().left + this.$chart.width()/2,
-			y: -1 * (chartPosition.y + this.$chart.offset().top + this.$chart.height()/2)
-		};
 	}
 
 	get angle() {
@@ -232,6 +219,9 @@ class AttributeSlider {
 		// Set slider position.
 		let transform = `translate(${dragWithOffset.x}px, ${-dragWithOffset.y}px)`;
 		this.$slider.css(`transform`, transform);
+		
+		// Dispatch slide event.
+		this.$slider.trigger(AttributeSlider.SLIDE_EVENT);
 	}
 
 	get vertex() {

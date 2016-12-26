@@ -51,20 +51,20 @@ class RadarChart {
 
 			// Create slider.
 			let slider = new AttributeSlider(
-				`.chart`,
+				this,
 				index,
-				this._radius,
 				correctedAngle,
 				attribute.amount
 			);
 			this._sliders.push(slider);
-			this._vertices[index] = [slider.vertex.x, slider.vertex.y];
+			let svgVertex = this.svgPosition(slider.vertex);
+			this._vertices[index] = [svgVertex.x, svgVertex.y];
 
 			// Listen for changes to slider.
 			// Record new vertex for drawing star.
 			$(`#slider-${index}`).on(AttributeSlider.SLIDE_EVENT, (event) => {
 				let sliderID = event.target.id.split(`-`)[1];
-				let vertex = this._sliders[sliderID].vertex;
+				let vertex = this.svgPosition(this._sliders[sliderID].vertex);
 				this._vertices[sliderID] = [vertex.x, vertex.y];
 				this.drawStar();
 			});
@@ -76,6 +76,31 @@ class RadarChart {
 		$(window).resize((event) => {
 			this.drawStar();
 		});
+	}
+
+	get $element() {
+		return this.$chart;
+	}
+
+	chartPosition(screenPosition) {
+		return {
+			x: screenPosition.x - this.$chart.offset().left - this.$chart.width()/2,
+			y: -1 * (screenPosition.y - this.$chart.offset().top - this.$chart.height()/2)
+		};
+	}
+
+	screenPosition(chartPosition) {
+		return {
+			x: chartPosition.x + this.$chart.offset().left + this.$chart.width()/2,
+			y: -1 * (chartPosition.y + this.$chart.offset().top + this.$chart.height()/2)
+		};
+	}
+
+	svgPosition(chartPosition) {
+		return {
+			x: chartPosition.x + this.$chart.width()/2,
+			y: -chartPosition.y + this.$chart.height()/2
+		};
 	}
 
 	setRadius() {
@@ -104,13 +129,20 @@ class RadarChart {
 		}
 	}
 
+	get radius() {
+		return this._radius;
+	}
+
 	drawGuides() {		
 		this._svgGuides.clear();
 
 		// Draw scale rings.
 		let ringInterval = (this._radius.max - this._radius.min) / RadarChart.SCALE;
 		for (let i = 0; i <= RadarChart.SCALE; i++) {
-			let ring = this._svgGuides.circle(this.$chart.width()/2, this.$chart.height()/2, this._radius.min+ringInterval*i);
+			let ring = this._svgGuides.circle(
+				this.$chart.width()/2,
+				this.$chart.height()/2,
+				this._radius.min + ringInterval * i);
 			let attr = {
 				fill: "none",
 				stroke: "#fff",
@@ -176,13 +208,14 @@ class RadarChart {
 
 	drawStar() {
 		this._svgStar.clear();
-		
-		let star = this._svgStar.polyline( [].concat.apply([],this._vertices) );
+
+		let star = this._svgStar.polygon( [].concat.apply([],this._vertices) );
 		star.attr({
+			fill: "#20beef",
+			fillOpacity: 0.15,
 			stroke: "#20beef",
-			opacity: 0.5,
-			fill: "none",
-			strokeWidth: 2
+			strokeWidth: 2,
+			strokeOpacity: 0.3
 		});
 	}
 
