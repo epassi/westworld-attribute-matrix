@@ -10,7 +10,9 @@ class RadarChart {
 		this._firstName = hostProfile.firstName;
 		this._lastName = hostProfile.lastName;
 		this._radius = {}; // min and max
-		this._svg = {};
+		this._svgGuides = {};
+		this._svgStar = {};
+		this._vertices = [];
 
 		// The host profile data structure stays true to Westworld's attribute grouping,
 		// but this interactive model will only let you look at the first group.
@@ -25,7 +27,7 @@ class RadarChart {
 		});
 
 		// Draw guides.
-		this._svg = new Snap(`.guides`);
+		this._svgGuides = new Snap(`.guides`);
 		this.drawGuides();
 		$(window).resize((event) => {
 			this.drawGuides();
@@ -48,14 +50,50 @@ class RadarChart {
 			let correctedAngle = (angle+360) % 360;
 
 			// Create slider.
-			this._sliders.push(new AttributeSlider(
-				`.chart`,
+			let slider = new AttributeSlider(
+				this,
 				index,
-				this._radius,
 				correctedAngle,
 				attribute.amount
-			));
+			);
+			this._sliders.push(slider);
+			let svgVertex = this.getPointFromCorner(slider.vertex);
+			this._vertices[index] = [svgVertex.x, svgVertex.y];
+
+			// Listen for changes to slider.
+			// Record new vertex for drawing star.
+			$(`#slider-${index}`).on(AttributeSlider.SLIDE_EVENT, (event) => {
+				let sliderID = event.target.id.split(`-`)[1];
+				let vertex = this.getPointFromCorner(this._sliders[sliderID].vertex);
+				this._vertices[sliderID] = [vertex.x, vertex.y];
+				this.drawStar();
+			});
 		}
+
+		// Draw star.
+		this._svgStar = new Snap(`.star`);
+		this.drawStar();
+		$(window).resize((event) => {
+			this.drawStar();
+		});
+	}
+
+	get $element() {
+		return this.$chart;
+	}
+
+	getPointFromCenter(pointFromScreenCorner) {
+		return {
+			x: pointFromScreenCorner.x - this.$chart.offset().left - this.$chart.width()/2,
+			y: -1 * (pointFromScreenCorner.y - this.$chart.offset().top - this.$chart.height()/2)
+		};
+	}
+
+	getPointFromCorner(pointFromCenter) {
+		return {
+			x: pointFromCenter.x + this.$chart.width()/2,
+			y: -pointFromCenter.y + this.$chart.height()/2
+		};
 	}
 
 	setRadius() {
@@ -84,13 +122,20 @@ class RadarChart {
 		}
 	}
 
+	get radius() {
+		return this._radius;
+	}
+
 	drawGuides() {		
-		this._svg.clear();
+		this._svgGuides.clear();
 
 		// Draw scale rings.
 		let ringInterval = (this._radius.max - this._radius.min) / RadarChart.SCALE;
 		for (let i = 0; i <= RadarChart.SCALE; i++) {
-			let ring = this._svg.circle(this.$chart.width()/2, this.$chart.height()/2, this._radius.min+ringInterval*i);
+			let ring = this._svgGuides.circle(
+				this.$chart.width()/2,
+				this.$chart.height()/2,
+				this._radius.min + ringInterval * i);
 			let attr = {
 				fill: "none",
 				stroke: "#fff",
@@ -132,7 +177,7 @@ class RadarChart {
 			}
 
 			// Draw track.
-			let sliderTrack = this._svg.line(
+			let sliderTrack = this._svgGuides.line(
 				trackStart.x,
 				trackStart.y,
 				trackEnd.x,
@@ -145,13 +190,26 @@ class RadarChart {
 			});
 
 			// Draw terminal.
-			let terminal = this._svg.circle(trackEnd.x, trackEnd.y, AttributeSlider.SIZE/2);
+			let terminal = this._svgGuides.circle(trackEnd.x, trackEnd.y, AttributeSlider.SIZE/2);
 			terminal.attr({
 				fill: "#333",
 				stroke: "#666",
 				strokeWidth: 2
 			});
 		}
+	}
+
+	drawStar() {
+		this._svgStar.clear();
+
+		let star = this._svgStar.polygon( [].concat.apply([],this._vertices) );
+		star.attr({
+			fill: "#20beef",
+			fillOpacity: 0.15,
+			stroke: "#20beef",
+			strokeWidth: 2,
+			strokeOpacity: 0.3
+		});
 	}
 
 }
