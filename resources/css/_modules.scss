@@ -3,6 +3,7 @@
 }
 
 .chart {
+	position: relative;
 	margin: 0 auto;
 	width: 100%;
 	height: 100%;
@@ -32,13 +33,31 @@
 	transform: translate(-50%, -50%);
 	cursor: -webkit-grab;
 	opacity: 0.6;
+
+	&:after {
+		position: absolute;
+		top: -1.0rem;
+		bottom: -1.0rem; 
+		left: -1.0rem;
+		right: -1.0rem; 
+		content: "";
+	}
 }
 
-.guides {
+.rendering {
 	position: absolute;
-	z-index: 0;
 	width: 100%;
 	height: 100%;
 	top: 0;
 	left: 0;
+}
+
+.guides {
+	@extend .rendering;
+	// z-index: 100;
+}
+
+.star {
+	@extend .rendering;
+	// z-index: 200;
 }

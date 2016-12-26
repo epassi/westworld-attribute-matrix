@@ -11,6 +11,9 @@
 // 0.2 Per Westworld design, slider 0 value starts a little further out from center.
 //     Max radius also leaves room for attribute labels on the sides.
 
+// 0.4 Needed to create a custom Slide event so that RadarChart
+//     can track changes to AttributeSliders.
+
 
 // Fun facts:
 // - The most triangle math I've ever used in a single program:
