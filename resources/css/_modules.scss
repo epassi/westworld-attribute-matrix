@@ -33,6 +33,15 @@
 	transform: translate(-50%, -50%);
 	cursor: -webkit-grab;
 	opacity: 0.6;
+
+	&:after {
+		position: absolute;
+		top: -1.0rem;
+		bottom: -1.0rem; 
+		left: -1.0rem;
+		right: -1.0rem; 
+		content: "";
+	}
 }
 
 .rendering {

@@ -6,7 +6,7 @@ class AttributeSlider {
 		return Math.sqrt(Math.pow(drag.x, 2) + Math.pow(drag.y, 2));
 	}
 
-	static get SIZE() {return 16;} // pixels
+	static get SIZE() {return 14;} // pixels
 	static get SLIDE_EVENT() {return `slide`;};
 
 	// constructor(chartSelector, parentChart, sliderID, radius, angle, value) {
