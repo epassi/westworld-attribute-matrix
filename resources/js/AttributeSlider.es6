@@ -41,7 +41,7 @@ class AttributeSlider {
 		else if (angle > 90 && angle < 270)	this._labelLocation = "left";
 		else if (angle === 270)				this._labelLocation = "bottom";
 		else								this._labelLocation = "right";
-		this.$chartGrid.append(`<label class="attribute" id="label-${sliderID}">${name}</label>`);
+		this.$chartGrid.append(`<label class="attribute" id="label-${sliderID}">${name} <span class="amount">[${value}]</span></label>`);
 		this.$label = $(`#label-${sliderID}`);
 		this.placeLabel();
 
@@ -155,6 +155,8 @@ class AttributeSlider {
 		// Set value.
 		let dragRadiusRatio = (AttributeSlider.distanceFromCenter(correctedDrag) - this._radius.min) / (this._radius.max - this._radius.min);
 		this._value = RadarChart.SCALE * dragRadiusRatio;
+		this.$label.find(`.amount`).text(`[${Math.round(this._value)}]`);
+		this.placeLabel(); // Realigns the label as its width changes.
 
 		// Set vertex.
 		this._vertex = correctedDrag;
