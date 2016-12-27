@@ -69,6 +69,7 @@ class AttributeSlider {
 			}));
 		});
 		this.$chart.on(`mousemove`, (event) => {
+			event.preventDefault();
 			this.onDrag(this.parentChart.getPointFromCenter({
 				x: event.pageX,
 				y: event.pageY
