@@ -2,7 +2,7 @@ class RadarChart {
 
 	static get SCALE() {return 20;} // "points" in Westworld terms
 	static get MIN_RADIUS_RATIO() {return 0.1;}
-	static get MAX_RADIUS_RATIO() {return 0.9;}
+	static get MAX_RADIUS_RATIO() {return 0.85;}
 
 	constructor(chartSelector, hostProfile) {
 		this.$chart = $(chartSelector);
@@ -33,7 +33,6 @@ class RadarChart {
 			this.drawGuides();
 		});
 
-
 		// Figure out slider angle interval.
 		// Sliders are arranged clockwise starting at the 12:00 position (90°). 
 		let angleStart = 90; // degrees
@@ -54,7 +53,8 @@ class RadarChart {
 				this,
 				index,
 				correctedAngle,
-				attribute.amount
+				attribute.amount,
+				attribute.name
 			);
 			this._sliders.push(slider);
 			let svgVertex = this.getPointFromCorner(slider.vertex);
