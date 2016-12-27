@@ -14,6 +14,14 @@
 // 0.4 Needed to create a custom Slide event so that RadarChart
 //     can track changes to AttributeSliders.
 
+// 0.6 Adding the labels might be the hardest part.
+//     Started by modeling it manually in CSS, then sketched out the pattern.
+//     Finally implemented dynamic solution in JavaScript.
+// 0.6 As slider moves, value shown in label needs to change.
+//     The changing width of the text affected the alignment of labels
+//     on the top, bottom, and left. Running the placeLabel() function 
+//     on each slide drag was inefficient but effective.
+
 
 // Fun facts:
 // - The most triangle math I've ever used in a single program:

@@ -9,8 +9,7 @@ class AttributeSlider {
 	static get SIZE() {return 14;} // pixels
 	static get SLIDE_EVENT() {return `slide`;};
 
-	// constructor(chartSelector, parentChart, sliderID, radius, angle, value) {
-	constructor(parentChart, sliderID, angle, value) {
+	constructor(parentChart, sliderID, angle, value, name) {
 		this.parentChart = parentChart;
 		this.$chart = parentChart.$element;
 		this.$chartGrid = this.$chart.find(`.grid`);
@@ -18,6 +17,7 @@ class AttributeSlider {
 		this._angle = 0; // set by setter
 		this._dragging = false;
 		this._vertex = {x:0, y:0};
+		this._labelLocation = ``;
 
 		// Create slider element.
 		this.$chartGrid.append(`<div class="slider" id="slider-${sliderID}"></div>`);
@@ -34,6 +34,16 @@ class AttributeSlider {
 
 		// Set initial value.
 		this.value = value;
+
+		// Create label.
+		// Do this after radius has been set.
+		if (angle === 90)					this._labelLocation = "top";
+		else if (angle > 90 && angle < 270)	this._labelLocation = "left";
+		else if (angle === 270)				this._labelLocation = "bottom";
+		else								this._labelLocation = "right";
+		this.$chartGrid.append(`<label class="attribute" id="label-${sliderID}">${name} <span class="amount">[${value}]</span></label>`);
+		this.$label = $(`#label-${sliderID}`);
+		this.placeLabel();
 
 		// Capture start of slide.
 		this.$slider.on(`touchstart`, (event) => {
@@ -59,6 +69,7 @@ class AttributeSlider {
 			}));
 		});
 		this.$chart.on(`mousemove`, (event) => {
+			event.preventDefault();
 			this.onDrag(this.parentChart.getPointFromCenter({
 				x: event.pageX,
 				y: event.pageY
@@ -144,6 +155,8 @@ class AttributeSlider {
 		// Set value.
 		let dragRadiusRatio = (AttributeSlider.distanceFromCenter(correctedDrag) - this._radius.min) / (this._radius.max - this._radius.min);
 		this._value = RadarChart.SCALE * dragRadiusRatio;
+		this.$label.find(`.amount`).text(`[${Math.round(this._value)}]`);
+		this.placeLabel(); // Realigns the label as its width changes.
 
 		// Set vertex.
 		this._vertex = correctedDrag;
@@ -163,6 +176,38 @@ class AttributeSlider {
 	onDrop(drop) {
 		this._dragging = false;
 		this.$chart.removeClass(`is-dragging`);
+	}
+
+	placeLabel() {
+		// Calculate label base position.
+		let labelPosition = {
+			x: this._radius.max * Math.cos(Math.radians(this.angle)),
+			y: this._radius.max * Math.sin(Math.radians(this.angle))
+		};
+
+		// Correct for side.
+		switch (this._labelLocation) {
+			case `top`:
+				labelPosition.x -= this.$label.width()/2;
+				labelPosition.y += this.$label.height() + AttributeSlider.SIZE;
+				break;
+			case `left`:
+				labelPosition.x -= this.$label.width() + AttributeSlider.SIZE;
+				labelPosition.y += this.$label.height()/2;
+				break;
+			case `bottom`:
+				labelPosition.x -= this.$label.width()/2;
+				labelPosition.y -= AttributeSlider.SIZE;
+				break;
+			case `right`:
+				labelPosition.x += AttributeSlider.SIZE;
+				labelPosition.y += this.$label.height()/2;
+				break;
+		}
+
+		// Set label position.
+		let transform = `translate(${labelPosition.x}px, ${-labelPosition.y}px)`;
+		this.$label.css(`transform`, transform);
 	}
 
 	get angle() {
@@ -186,6 +231,9 @@ class AttributeSlider {
 
 		// Reposition the slider.
 		this.value = this.value; 
+
+		// Reposition the label.
+		if (this.$label) this.placeLabel();
 	}
 
 	get value() {
