@@ -4,6 +4,10 @@ class RadarChart {
 	static get MIN_RADIUS_RATIO() {return 0.1;}
 	static get MAX_RADIUS_RATIO() {return 0.85;}
 
+	static get COLOR_WW_BLUE_DARK() {return "#263339";}
+	static get COLOR_WW_BLUE_MEDIUM() {return "#2f5b74";}
+	static get COLOR_WW_BLUE_LIGHT() {return "#499fb6";}
+
 	constructor(chartSelector, hostProfile) {
 		this.$chart = $(chartSelector);
 		this._sliders = [];
@@ -192,9 +196,10 @@ class RadarChart {
 			// Draw terminal.
 			let terminal = this._svgGuides.circle(trackEnd.x, trackEnd.y, AttributeSlider.SIZE/2);
 			terminal.attr({
-				fill: "#333",
-				stroke: "#666",
-				strokeWidth: 2
+				fill: RadarChart.COLOR_WW_BLUE_DARK,
+				stroke: "#fff",
+				strokeWidth: 2,
+				strokeOpacity: 0.3
 			});
 		}
 	}
@@ -204,11 +209,11 @@ class RadarChart {
 
 		let star = this._svgStar.polygon( [].concat.apply([],this._vertices) );
 		star.attr({
-			fill: "#20beef",
-			fillOpacity: 0.15,
-			stroke: "#20beef",
+			fill: RadarChart.COLOR_WW_BLUE_LIGHT,
+			fillOpacity: 0.3,
+			stroke: RadarChart.COLOR_WW_BLUE_LIGHT,
 			strokeWidth: 2,
-			strokeOpacity: 0.3
+			strokeOpacity: 0.4
 		});
 	}
 
