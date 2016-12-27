@@ -7,6 +7,7 @@ class RadarChart {
 	static get COLOR_WW_BLUE_DARK() {return "#263339";}
 	static get COLOR_WW_BLUE_MEDIUM() {return "#2f5b74";}
 	static get COLOR_WW_BLUE_LIGHT() {return "#499fb6";}
+	static get COLOR_WW_GREEN() {return "#3b9b4c";}
 
 	constructor(chartSelector, hostProfile) {
 		this.$chart = $(chartSelector);
