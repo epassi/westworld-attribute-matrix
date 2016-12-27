@@ -51,7 +51,10 @@ class AttributeSlider {
 		}
 		this.$chartGrid.append(label);
 		this.$label = $(`#label-${sliderID}`);
-		this.placeLabel();
+		// Slight delay before placing label to account for race condition.
+		setTimeout(() => {
+			this.placeLabel();
+		}, 200);
 
 		// Capture start of slide.
 		this.$slider.on(`touchstart`, (event) => {
