@@ -165,7 +165,7 @@ class AttributeSlider {
 
 		// Set value.
 		let dragRadiusRatio = (AttributeSlider.distanceFromCenter(correctedDrag) - this._radius.min) / (this._radius.max - this._radius.min);
-		this._value = RadarChart.SCALE * dragRadiusRatio;
+		this._value = Math.round(RadarChart.SCALE * dragRadiusRatio);
 		this.$label.find(`.amount`).text(`[${Math.round(this._value)}]`);
 		this.placeLabel(); // Realigns the label as its width changes.
 
@@ -187,6 +187,9 @@ class AttributeSlider {
 	onDrop(drop) {
 		this._dragging = false;
 		this.$chart.removeClass(`is-dragging`);
+
+		// Snap to exact value.
+		this.value = this.value;
 	}
 
 	placeLabel() {
