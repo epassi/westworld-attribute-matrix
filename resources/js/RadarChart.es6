@@ -3,6 +3,7 @@ class RadarChart {
 	static get SCALE() {return 20;} // "points" in Westworld terms
 	static get MIN_RADIUS_RATIO() {return 0.1;}
 	static get MAX_RADIUS_RATIO() {return 0.85;}
+	static get PRINCIPAL_ATTRIBUTE() {return `Bulk Apperception`;}
 
 	static get COLOR_WW_BLUE_DARK() {return "#263339";}
 	static get COLOR_WW_BLUE_MEDIUM() {return "#2f5b74";}
@@ -151,8 +152,8 @@ class RadarChart {
 			// Innermost ring has a wider stroke.
 			if (i == 0) {
 				attr.strokeWidth = 2;
-				attr.opacity = 1;
-				attr.stroke = "#666";
+				attr.opacity = 0.5;
+				attr.stroke = "#fff";
 			}
 
 			ring.attr(attr);
@@ -202,6 +203,16 @@ class RadarChart {
 				strokeWidth: 2,
 				strokeOpacity: 0.3
 			});
+
+			// Emphasize principal attribute.
+			if (attribute.name === RadarChart.PRINCIPAL_ATTRIBUTE) {
+				sliderTrack.attr({
+					opacity: 0.5
+				});
+				terminal.attr({
+					strokeOpacity: 0.5
+				});
+			} 
 		}
 	}
 
