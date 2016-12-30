@@ -2,11 +2,48 @@
 	background: $color-ww-blue-dark;
 }
 
+.delos-nav {
+	position: fixed;
+	z-index: 100;
+	top: 0;
+	left: 0;
+	width: $nav-width;
+	bottom: 0;
+
+	padding: 5.0rem 4.0rem;
+
+	.config {
+		cursor: pointer;
+		margin-top: 1.6rem;
+		border-style: solid;
+		border-width: 16px 32px 32px 16px;
+		border-image: url(../img/punchcard-border.svg) 16 32 32 16 stretch;
+		// border-image-outset: 16px 32px 32px 16px;
+		// background: #ff0;
+		height: 6.4rem;
+
+		.id {
+			text-transform: uppercase;
+			color: $color-ww-blue-light;
+			font-size: 1.4rem;
+		}
+		.name {
+			color: #fff;
+			opacity: 0.5;
+			font-size: 1.2rem;
+			margin-top: 0.4rem;
+		}		
+	}
+
+}
+
 .chart {
-	position: relative;
-	margin: 0 auto;
-	width: 100%;
-	height: 100%;
+	position: fixed;
+	z-index: 0;
+	top: 0;
+	left: $nav-width/2;
+	right: 0;
+	bottom: 0;
 	overflow: hidden; // to hide offset grid
 
 	.grid {
