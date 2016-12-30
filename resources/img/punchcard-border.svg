@@ -9,7 +9,7 @@
             <use xlink:href="#path-1"></use>
         </mask>
     </defs>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" opacity="0.200000003">
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" opacity="0.149999991">
         <g id="punchcard-border" stroke="#FFFFFF" stroke-width="2">
             <use id="Combined-Shape" mask="url(#mask-2)" xlink:href="#path-1"></use>
         </g>
