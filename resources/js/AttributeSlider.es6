@@ -282,6 +282,12 @@ class AttributeSlider {
 		let transform = `translate(${dragWithOffset.x}px, ${-dragWithOffset.y}px)`;
 		this.$slider.css(`transform`, transform);
 
+		// Set amount in label.
+		if (this.$label) {
+			this.$label.find(`.amount`).text(`[${Math.round(this._value)}]`);
+			this.placeLabel();
+		}
+
 		// Dispatch slide event.
 		this.$slider.trigger(AttributeSlider.SLIDE_EVENT);
 	}
