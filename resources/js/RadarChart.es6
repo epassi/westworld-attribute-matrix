@@ -2,7 +2,7 @@ class RadarChart {
 
 	static get SCALE() {return 20;} // "points" in Westworld terms
 	static get MIN_RADIUS_RATIO() {return 0.1;}
-	static get MAX_RADIUS_RATIO() {return 0.85;}
+	static get MAX_RADIUS_RATIO() {return 0.8;}
 	static get PRINCIPAL_ATTRIBUTE() {return `Bulk Apperception`;}
 
 	static get COLOR_WW_BLUE_DARK() {return "#263339";}
