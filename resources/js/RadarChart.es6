@@ -19,6 +19,7 @@ class RadarChart {
 		this._svgGuides = {};
 		this._svgStar = {};
 		this._vertices = [];
+		this._config = 0;
 
 		// The host profile data structure stays true to Westworld's attribute grouping,
 		// but this interactive model will only let you look at the first group.
@@ -59,7 +60,7 @@ class RadarChart {
 				this,
 				index,
 				correctedAngle,
-				attribute.amount,
+				attribute.amount[this._config],
 				attribute.name
 			);
 			this._sliders.push(slider);
@@ -227,6 +228,14 @@ class RadarChart {
 			strokeWidth: 2,
 			strokeOpacity: 0.4
 		});
+	}
+
+	set config(index) {
+		this._config = index;
+
+		for (let [index, slider] of this._sliders.entries()) {
+			slider.value = this._attributes[index].amount[this._config];			
+		}		
 	}
 
 }
