@@ -19,6 +19,7 @@ class RadarChart {
 		this._svgGuides = {};
 		this._svgStar = {};
 		this._vertices = [];
+		this._configs = hostProfile.configs;
 		this._config = 0;
 
 		// The host profile data structure stays true to Westworld's attribute grouping,
@@ -47,7 +48,7 @@ class RadarChart {
 
 		// Add sliders.
 		for (let [index, attribute] of this._attributes.entries()) {
-			console.log(`${attribute.name} = ${attribute.amount}`);
+			// console.log(`${attribute.name} = ${attribute.amount[this._config]}`);
 
 			// Calculate angle starting from 12:00 (90°) position.
 			let angle = angleStart - index*angleInterval;
@@ -236,6 +237,10 @@ class RadarChart {
 		for (let [index, slider] of this._sliders.entries()) {
 			slider.value = this._attributes[index].amount[this._config];			
 		}		
+	}
+
+	get configs() {
+		return this._configs;
 	}
 
 }
