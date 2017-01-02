@@ -3,12 +3,12 @@
 	"firstName": "Maeve",
 	"lastName": "Millay",
 	"configs": [
-		{"id": "Config 1.0",	"name": "Farmer / Mother"},
-		{"id": "Config 2.0",	"name": "Madam"},
-		{"id": "Config 2.1",	"name": "+ Aggression"},
-		{"id": "Config 2.2",	"name": "+ Perception, Emotional Acuity"},
-		{"id": "Config 3.0",	"name": "Self Alterations"},
-		{"id": "Config 4.0",	"name": "Future Narrative"}
+		{"id": "1.0",	"name": "Farmer / Mother"},
+		{"id": "2.0",	"name": "Madam"},
+		{"id": "2.1",	"name": "+ Aggression"},
+		{"id": "2.2",	"name": "+ Perception, Emotional Acuity"},
+		{"id": "3.0",	"name": "Self Alterations"},
+		{"id": "4.0",	"name": "Future Narrative"}
 	],
 	"attributeGroups": [
 		{
