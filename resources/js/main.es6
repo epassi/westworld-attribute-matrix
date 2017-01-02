@@ -29,7 +29,10 @@ let init = () => {
 			}
 
 			// Set initial config.
-			changeConfig(0);
+			// Create delay for more dramatic intro.
+			setTimeout(() => {
+				changeConfig(0);
+			}, 1000);
 
 			// Deselect the current config when sliders are adjusted by user.
 			_chart.$chart.on(AttributeSlider.SLIDE_EVENT, event => {

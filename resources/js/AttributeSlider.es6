@@ -33,18 +33,20 @@ class AttributeSlider {
 		// Set initial angle.
 		this.angle = angle;
 
-		// Set initial value.
-		this.value = value;
+		// Set initial value to 0.
+		// Ignore the value passed in to the constructor so that
+		// RadarChart.config can animate slider into its initial state.
+		this.value = 0;
 
 		// Create label.
 		// Do this after radius has been set.
-		let label = `<label class="attribute" id="label-${sliderID}">${name} <span class="amount">[${value}]</span></label>`;
+		let label = `<label class="attribute" id="label-${sliderID}">${name} <span class="amount">[${this.value}]</span></label>`;
 		if (angle === 90) {
 			this._labelLocation = "top";
 		} else if (angle > 90 && angle < 270)	{
 			this._labelLocation = "left";
 			// Show amount on the left instead of the right.
-			label = `<label class="attribute" id="label-${sliderID}"><span class="amount">[${value}]</span> ${name}</label>`;
+			label = `<label class="attribute" id="label-${sliderID}"><span class="amount">[${this.value}]</span> ${name}</label>`;
 		} else if (angle === 270) {
 			this._labelLocation = "bottom";
 		} else {
