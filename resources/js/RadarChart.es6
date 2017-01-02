@@ -70,11 +70,15 @@ class RadarChart {
 
 			// Listen for changes to slider.
 			// Record new vertex for drawing star.
-			$(`#slider-${index}`).on(AttributeSlider.SLIDE_EVENT, (event) => {
+			$(`#slider-${index}`).on(AttributeSlider.SLIDE_EVENT + " " + AttributeSlider.CHANGE_EVENT, (event) => {
 				let sliderID = event.target.id.split(`-`)[1];
 				let vertex = this.getPointFromCorner(this._sliders[sliderID].vertex);
 				this._vertices[sliderID] = [vertex.x, vertex.y];
 				this.drawStar();
+
+				if (event.type === AttributeSlider.SLIDE_EVENT) {
+					this.$chart.trigger(AttributeSlider.SLIDE_EVENT);
+				}
 			});
 		}
 
@@ -231,11 +235,17 @@ class RadarChart {
 		});
 	}
 
+	get config() {
+		return this._config;
+	}
+
 	set config(index) {
 		this._config = index;
 
 		for (let [index, slider] of this._sliders.entries()) {
-			slider.value = this._attributes[index].amount[this._config];			
+			TweenLite.to(slider, 0.5, {
+				value: this._attributes[index].amount[this._config]
+			});		
 		}		
 	}
 

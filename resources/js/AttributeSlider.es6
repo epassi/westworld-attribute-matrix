@@ -8,6 +8,7 @@ class AttributeSlider {
 
 	static get SIZE() {return 14;} // pixels
 	static get SLIDE_EVENT() {return `slide`;};
+	static get CHANGE_EVENT() {return `change`;};
 
 	constructor(parentChart, sliderID, angle, value, name) {
 		this.parentChart = parentChart;
@@ -185,11 +186,13 @@ class AttributeSlider {
 	}
 
 	onDrop(drop) {
-		this._dragging = false;
-		this.$chart.removeClass(`is-dragging`);
+		if (this._dragging) {
+			this._dragging = false;
+			this.$chart.removeClass(`is-dragging`);
 
-		// Snap to exact value.
-		this.value = this.value;
+			// Snap to exact value.
+			this.value = this.value;
+		}
 	}
 
 	placeLabel() {
@@ -282,8 +285,14 @@ class AttributeSlider {
 		let transform = `translate(${dragWithOffset.x}px, ${-dragWithOffset.y}px)`;
 		this.$slider.css(`transform`, transform);
 
-		// Dispatch slide event.
-		this.$slider.trigger(AttributeSlider.SLIDE_EVENT);
+		// Set amount in label.
+		if (this.$label) {
+			this.$label.find(`.amount`).text(`[${Math.round(this._value)}]`);
+			this.placeLabel();
+		}
+
+		// Dispatch change event.
+		this.$slider.trigger(AttributeSlider.CHANGE_EVENT);
 	}
 
 	get vertex() {

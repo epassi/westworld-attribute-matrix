@@ -52,6 +52,7 @@ module.exports = function(grunt) {
 					"resources/js/all.min.js": [
 						"vendor/jquery/dist/jquery.min.js",
 						"vendor/Snap.svg/dist/snap.svg-min.js",
+						"vendor/gsap/src/minified/TweenLite.min.js",
 						"resources/js/**/*.js", 
 						"!resources/js/all.min.js"]
 				}

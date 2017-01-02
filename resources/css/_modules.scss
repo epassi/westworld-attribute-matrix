@@ -3,45 +3,92 @@
 }
 
 .delos-nav {
-	position: fixed;
-	z-index: 100;
-	top: 0;
-	left: 0;
-	width: $nav-width;
-	bottom: 0;
+	display: none;
+}
+@media (min-width: $vp-large-min) {
+	.delos-nav {
+		display: block;
+		position: fixed;
+		z-index: 100;
+		top: 0;
+		left: 0;
+		width: $nav-width;
+		bottom: 0;
+		padding: 5.0rem $nav-padding-side;
 
-	padding: 5.0rem 4.0rem;
+		.config {
+			position: relative;
+			margin: 20px auto;
+			background: $color-ww-punchcard;
+			width: $punchcard-width;
+			height: $punchcard-height;
+			cursor: pointer;
+			margin-top: 1.6rem;
+			clip-path: polygon(
+				$punchcard-corner-size-sm 0,
+				100% 0,
+				100% $punchcard-height - $punchcard-corner-size-lg,
+				$punchcard-width - $punchcard-corner-size-lg 100%,
+				0 100%,
+				0 $punchcard-corner-size-sm);
 
-	.config {
-		cursor: pointer;
-		margin-top: 1.6rem;
-		border-style: solid;
-		border-width: 16px 32px 32px 16px;
-		border-image: url(../img/punchcard-border.svg) 16 32 32 16 stretch;
-		// border-image-outset: 16px 32px 32px 16px;
-		// background: #ff0;
-		height: 6.4rem;
+			.content {
+				position: absolute;
+				top: $punchcard-border-thickness;
+				left: $punchcard-border-thickness;
+				content: "";
+				background: $color-ww-blue-dark;
+				width: $punchcard-width - $punchcard-border-thickness*2;
+				height: $punchcard-height - $punchcard-border-thickness*2;
+				clip-path: polygon(
+					$punchcard-corner-size-sm - $punchcard-border-thickness 0,
+					100% 0,
+					100% $punchcard-height - $punchcard-corner-size-lg - $punchcard-border-thickness,
+					$punchcard-width - $punchcard-corner-size-lg - $punchcard-border-thickness 100%,
+					0 100%,
+					0 $punchcard-corner-size-sm - $punchcard-border-thickness);
 
-		.id {
-			text-transform: uppercase;
-			color: $color-ww-blue-light;
-			font-size: 1.4rem;
+				.id {
+					text-transform: uppercase;
+					color: $color-ww-blue-light;
+					font-size: 1.4rem;
+					margin-top: 0.9rem;
+					margin-left: $punchcard-corner-size-lg;
+				}
+
+				.name {
+					color: #fff;
+					opacity: 0.5;
+					font-size: 1.2rem;
+					margin-top: 0.3rem;
+					margin-left: $punchcard-corner-size-lg;
+				}
+
+
+			}
+			
+			&:hover {
+				.content {
+					background: none;
+				}
+			}
+			
+			&.is-active {
+				background: $color-ww-punchcard-active;
+
+				.content {
+					background: none;
+				}
+			}
 		}
-		.name {
-			color: #fff;
-			opacity: 0.5;
-			font-size: 1.2rem;
-			margin-top: 0.4rem;
-		}		
 	}
-
 }
 
 .chart {
 	position: fixed;
 	z-index: 0;
 	top: 0;
-	left: $nav-width/2;
+	left: 0;
 	right: 0;
 	bottom: 0;
 	overflow: hidden; // to hide offset grid
@@ -58,6 +105,11 @@
 		.slider {
 			cursor: -webkit-grabbing;
 		}
+	}
+}
+@media (min-width: $vp-large-min) {
+	.chart {
+		left: $nav-width/2;
 	}
 }
 
@@ -102,11 +154,16 @@
 .attribute {
 	position: absolute;
 	text-transform: uppercase;
-	font-size: 1.4rem;
+	font-size: 1.2rem;
 	color: $color-ww-blue-light;
 
 	.amount {
 		color: #fff;
 		opacity: 0.7;
+	}
+}
+@media (min-width: $vp-large-min) {
+	.attribute {
+		font-size: 1.4rem;
 	}
 }
