@@ -3,11 +3,11 @@
 	"firstName": "Maeve",
 	"lastName": "Millay",
 	"configs": [
-		{"id": "1.0",	"name": "Farmer / Mother"},
+		{"id": "1.0",	"name": "Homesteader"},
 		{"id": "2.0",	"name": "Madam"},
-		{"id": "2.1",	"name": "+ Aggression"},
-		{"id": "2.2",	"name": "+ Perception, Emotional Acuity"},
-		{"id": "3.0",	"name": "Self Alterations"},
+		{"id": "2.1",	"name": "Narrative’s Mod"},
+		{"id": "2.2",	"name": "Elsie’s Mod"},
+		{"id": "3.0",	"name": "Maeve’s Self Mod"},
 		{"id": "4.0",	"name": "Future Narrative"}
 	],
 	"attributeGroups": [
@@ -25,7 +25,7 @@
 				{"name": "Decisiveness",		"amount": [10, 14, 14, 14, 14, 10]},
 				{"name": "Imagination",			"amount": [8, 13, 13, 13, 13, 15]},
 				{"name": "Curiosity",			"amount": [8, 8, 8, 8, 8, 14]},
-				{"name": "Aggression",			"amount": [1, 1, 15, 5, 5, 12]},
+				{"name": "Aggression",			"amount": [1, 1, 10, 5, 5, 12]},
 				{"name": "Loyalty",				"amount": [16, 16, 16, 16, 5, 1]},
 				{"name": "Empathy",				"amount": [19, 9, 9, 9, 9, 3]},
 				{"name": "Tenacity",			"amount": [11, 17, 17, 17, 17, 17]},
