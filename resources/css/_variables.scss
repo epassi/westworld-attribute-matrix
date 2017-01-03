@@ -1,39 +1,38 @@
 // Breakpoints
-$vp-small-max: 				599px;
-$vp-medium-min:			 	600px;
-$vp-large-min: 				900px;
+$vp-small-max: 					599px;
+$vp-medium-min:			 		600px;
+$vp-large-min: 					900px;
 
 // Font sizes
-$font-small: 				1.2rem;
-$font-medium:				1.6rem;
-$font-large: 				2.0rem;
+$font-small: 					1.2rem;
+$font-medium:					1.6rem;
+$font-large: 					2.0rem;
 
 // Colors
-$color-xlight:				#ccc;
-$color-light:				#ccc;
-$color-medium:				#ccc;
-$color-dark:				#ccc;
-$color-xdark:				#ccc;
-$color-invert:				#fff;
+$color-xlight:					#ccc;
+$color-light:					#ccc;
+$color-medium:					#ccc;
+$color-dark:					#ccc;
+$color-xdark:					#ccc;
+$color-invert:					#fff;
 
 // Westworld Colors
-$color-ww-blue-dark: 		#263339;
-$color-ww-blue-medium:	 	#2f5b74;
-$color-ww-blue-light: 		#499fb6;
-$color-ww-green:	 		#3b9b4c;
-$color-ww-punchcard:		rgba(255, 255, 255, 0.15);
-$color-ww-punchcard-active:	rgba(69, 159, 189, 0.25);
+$color-ww-blue-dark: 			#263339;
+$color-ww-blue-medium:	 		#2f5b74;
+$color-ww-blue-light: 			#499fb6;
+$color-ww-green:	 			#3b9b4c;
+$color-ww-punchcard:			rgba(255, 255, 255, 0.15);
+$color-ww-punchcard-active:		rgba(69, 159, 189, 0.25);
 
 // Motion
-$speed-fast: 				500ms;
-$speed-moderate:			1000ms;
-$speed-slow:				2000ms;
+$speed-fast: 					500ms;
+$speed-moderate:				1000ms;
+$speed-slow:					2000ms;
 
 // Westworld
-$nav-width: 				20.0rem;
-$nav-padding-side:			4.0rem;
-$punchcard-width:			$nav-width - 2*$nav-padding-side;
-$punchcard-height:			5.2rem;
-$punchcard-corner-size-sm:	0.6rem;
-$punchcard-corner-size-lg:	1.2rem;
-$punchcard-border-thickness: 0.1rem;
+$nav-height: 					10.0rem;
+$punchcard-width:				12.0rem;
+$punchcard-height:				5.2rem;
+$punchcard-corner-size-sm:		0.6rem;
+$punchcard-corner-size-lg:		1.2rem;
+$punchcard-border-thickness: 	0.1rem;

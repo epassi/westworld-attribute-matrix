@@ -7,23 +7,24 @@
 }
 @media (min-width: $vp-large-min) {
 	.delos-nav {
-		display: block;
 		position: fixed;
 		z-index: 100;
-		top: 0;
 		left: 0;
-		width: $nav-width;
 		bottom: 0;
-		padding: 7.0rem $nav-padding-side;
+		width: 100%;
+		height: $nav-height;
+
+		display: flex;
+		justify-content: center;
+		align-items: top;
 
 		.config {
+			display: inline-block;
 			position: relative;
-			margin: 20px auto;
 			background: $color-ww-punchcard;
 			width: $punchcard-width;
 			height: $punchcard-height;
 			cursor: pointer;
-			margin-top: 1.6rem;
 			clip-path: polygon(
 				$punchcard-corner-size-sm 0,
 				100% 0,
@@ -109,7 +110,7 @@
 }
 @media (min-width: $vp-large-min) {
 	.chart {
-		left: $nav-width/1.5;
+		bottom: $nav-height;
 	}
 }
 
