@@ -20,6 +20,19 @@ module.exports = function(grunt) {
 				}
 			}
 		},
+		postcss: {
+			options: {
+				// syntax: require('postcss-scss'), // work with SCSS directly
+				processors: [
+					// require('pixrem')(), // add fallbacks for rem units 
+					require("autoprefixer")({browsers: ["last 2 versions"]}) // add vendor prefixes 
+					// require('cssnano')() // minify the result 
+					]
+			},
+			dev: {
+				src: "resources/css/main.min.css"
+			}
+		},
 		jshint: {
 			dev: ["resources/js/**/*.js", 
 				  "!resources/js/**/*.es6.js",
@@ -52,6 +65,8 @@ module.exports = function(grunt) {
 					"resources/js/all.min.js": [
 						"vendor/jquery/dist/jquery.min.js",
 						"vendor/Snap.svg/dist/snap.svg-min.js",
+						"vendor/gsap/src/minified/TweenLite.min.js",
+						"vendor/gsap/src/minified/easing/EasePack.min.js",
 						"resources/js/**/*.js", 
 						"!resources/js/all.min.js"]
 				}
@@ -145,6 +160,7 @@ module.exports = function(grunt) {
 	});
 
 	grunt.loadNpmTasks("grunt-contrib-sass");
+	grunt.loadNpmTasks("grunt-postcss");
 	grunt.loadNpmTasks("grunt-contrib-jshint");
 	grunt.loadNpmTasks("grunt-eslint");
 	grunt.loadNpmTasks("grunt-babel");
@@ -156,6 +172,7 @@ module.exports = function(grunt) {
 
 	grunt.registerTask("default", [
 		"sass:dev",
+		"postcss:dev",
 		"jshint:dev",
 		"eslint:dev",
 		"babel:dev",
@@ -168,6 +185,7 @@ module.exports = function(grunt) {
 
 	grunt.registerTask("dev", [
 		"sass:dev",
+		"postcss:dev",
 		"jshint:dev",
 		"eslint:dev",
 		"babel:dev",

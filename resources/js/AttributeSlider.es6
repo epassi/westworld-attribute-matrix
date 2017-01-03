@@ -8,6 +8,7 @@ class AttributeSlider {
 
 	static get SIZE() {return 14;} // pixels
 	static get SLIDE_EVENT() {return `slide`;};
+	static get CHANGE_EVENT() {return `change`;};
 
 	constructor(parentChart, sliderID, angle, value, name) {
 		this.parentChart = parentChart;
@@ -32,18 +33,20 @@ class AttributeSlider {
 		// Set initial angle.
 		this.angle = angle;
 
-		// Set initial value.
-		this.value = value;
+		// Set initial value to 0.
+		// Ignore the value passed in to the constructor so that
+		// RadarChart.config can animate slider into its initial state.
+		this.value = 0;
 
 		// Create label.
 		// Do this after radius has been set.
-		let label = `<label class="attribute" id="label-${sliderID}">${name} <span class="amount">[${value}]</span></label>`;
+		let label = `<label class="attribute" id="label-${sliderID}">${name} <span class="amount">[${this.value}]</span></label>`;
 		if (angle === 90) {
 			this._labelLocation = "top";
 		} else if (angle > 90 && angle < 270)	{
 			this._labelLocation = "left";
 			// Show amount on the left instead of the right.
-			label = `<label class="attribute" id="label-${sliderID}"><span class="amount">[${value}]</span> ${name}</label>`;
+			label = `<label class="attribute" id="label-${sliderID}"><span class="amount">[${this.value}]</span> ${name}</label>`;
 		} else if (angle === 270) {
 			this._labelLocation = "bottom";
 		} else {
@@ -185,11 +188,13 @@ class AttributeSlider {
 	}
 
 	onDrop(drop) {
-		this._dragging = false;
-		this.$chart.removeClass(`is-dragging`);
+		if (this._dragging) {
+			this._dragging = false;
+			this.$chart.removeClass(`is-dragging`);
 
-		// Snap to exact value.
-		this.value = this.value;
+			// Snap to exact value.
+			this.value = this.value;
+		}
 	}
 
 	placeLabel() {
@@ -282,8 +287,14 @@ class AttributeSlider {
 		let transform = `translate(${dragWithOffset.x}px, ${-dragWithOffset.y}px)`;
 		this.$slider.css(`transform`, transform);
 
-		// Dispatch slide event.
-		this.$slider.trigger(AttributeSlider.SLIDE_EVENT);
+		// Set amount in label.
+		if (this.$label) {
+			this.$label.find(`.amount`).text(`[${Math.round(this._value)}]`);
+			this.placeLabel();
+		}
+
+		// Dispatch change event.
+		this.$slider.trigger(AttributeSlider.CHANGE_EVENT);
 	}
 
 	get vertex() {

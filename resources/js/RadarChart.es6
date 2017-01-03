@@ -2,7 +2,7 @@ class RadarChart {
 
 	static get SCALE() {return 20;} // "points" in Westworld terms
 	static get MIN_RADIUS_RATIO() {return 0.1;}
-	static get MAX_RADIUS_RATIO() {return 0.85;}
+	static get MAX_RADIUS_RATIO() {return 0.8;}
 	static get PRINCIPAL_ATTRIBUTE() {return `Bulk Apperception`;}
 
 	static get COLOR_WW_BLUE_DARK() {return "#263339";}
@@ -19,6 +19,8 @@ class RadarChart {
 		this._svgGuides = {};
 		this._svgStar = {};
 		this._vertices = [];
+		this._configs = hostProfile.configs;
+		this._config = 0;
 
 		// The host profile data structure stays true to Westworld's attribute grouping,
 		// but this interactive model will only let you look at the first group.
@@ -46,7 +48,7 @@ class RadarChart {
 
 		// Add sliders.
 		for (let [index, attribute] of this._attributes.entries()) {
-			console.log(`${attribute.name} = ${attribute.amount}`);
+			// console.log(`${attribute.name} = ${attribute.amount[this._config]}`);
 
 			// Calculate angle starting from 12:00 (90°) position.
 			let angle = angleStart - index*angleInterval;
@@ -59,7 +61,7 @@ class RadarChart {
 				this,
 				index,
 				correctedAngle,
-				attribute.amount,
+				attribute.amount[this._config],
 				attribute.name
 			);
 			this._sliders.push(slider);
@@ -68,11 +70,15 @@ class RadarChart {
 
 			// Listen for changes to slider.
 			// Record new vertex for drawing star.
-			$(`#slider-${index}`).on(AttributeSlider.SLIDE_EVENT, (event) => {
+			$(`#slider-${index}`).on(AttributeSlider.SLIDE_EVENT + " " + AttributeSlider.CHANGE_EVENT, (event) => {
 				let sliderID = event.target.id.split(`-`)[1];
 				let vertex = this.getPointFromCorner(this._sliders[sliderID].vertex);
 				this._vertices[sliderID] = [vertex.x, vertex.y];
 				this.drawStar();
+
+				if (event.type === AttributeSlider.SLIDE_EVENT) {
+					this.$chart.trigger(AttributeSlider.SLIDE_EVENT);
+				}
 			});
 		}
 
@@ -227,6 +233,29 @@ class RadarChart {
 			strokeWidth: 2,
 			strokeOpacity: 0.4
 		});
+	}
+
+	get config() {
+		return this._config;
+	}
+
+	set config(index) {
+		this._config = index;
+
+		for (let [index, slider] of this._sliders.entries()) {
+			TweenLite.to(
+				slider,
+				0.5,
+				{
+					value: this._attributes[index].amount[this._config],
+					ease: Power2.easeOut
+				}
+			);		
+		}
+	}
+
+	get configs() {
+		return this._configs;
 	}
 
 }

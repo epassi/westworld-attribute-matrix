@@ -1,43 +1,67 @@
-// Unexpected challenges:
-
-// 0.0 Biasing to a vertical or horizontal axis.
-// 0.0 Ensuring slider doesn't exceed radius.
-// 0.0 Dynamically sizing the map. Making the slider responsive.
-
-// 0.1 ES6 integration took longer than I thought. Still unable to get ESLint to work.
-
-// 0.2 Now that we're building the actual chart, needed to think about a data-driven model.
-//     Recreated the attribute grouping from Westworld as a JSON file.
-// 0.2 Per Westworld design, slider 0 value starts a little further out from center.
-//     Max radius also leaves room for attribute labels on the sides.
-
-// 0.4 Needed to create a custom Slide event so that RadarChart
-//     can track changes to AttributeSliders.
-
-// 0.6 Adding the labels might be the hardest part.
-//     Started by modeling it manually in CSS, then sketched out the pattern.
-//     Finally implemented dynamic solution in JavaScript.
-// 0.6 As slider moves, value shown in label needs to change.
-//     The changing width of the text affected the alignment of labels
-//     on the top, bottom, and left. Running the placeLabel() function 
-//     on each slide drag was inefficient but effective.
-
-
-// Fun facts:
-// - The most triangle math I've ever used in a single program:
-//   sin, cos, tan, Pythagorean theorem.
-// - First time using ES6.
-
+let $configMenu;
 
 let _chart = {};
+let _config = 0;
 
 let init = () => {
 	$(document).ready(() => {
+		$configMenu = $(`.config-menu`);
+
 		// Get host profile and create the chart.
 		$.getJSON("resources/data/host-profile.json", (hostProfile) => {
 			_chart = new RadarChart(`.chart`, hostProfile);
+
+			// Create config selector.
+			for (let [index, config] of _chart.configs.entries()) {
+				$configMenu.append(`
+					<div class="config" id="config-${index}">
+						<div class="content">
+							<h1 class="id">${config.id}</h1>
+							<p class="name">${config.name}</p>
+						</div>
+					</div>
+				`);
+
+				let $configItem = $(`#config-${index}`);
+				$configItem.click(event => {
+					changeConfig(index);
+				});
+			}
+
+			// Set initial config.
+			// Create delay for more dramatic intro.
+			setTimeout(() => {
+				changeConfig(0);
+			}, 1000);
+
+			// Deselect the current config when sliders are adjusted by user.
+			_chart.$chart.on(AttributeSlider.SLIDE_EVENT, event => {
+				changeConfig();
+				let $configItem = $(`#config-${_config}`);
+				$configItem.removeClass(`is-active`);
+
+			});
 		});
+		
 	});
 }
+
+let changeConfig = config => {
+	let $configItem = $(`#config-${_config}`);
+	let $newConfigItem = $(`#config-${config}`);
+
+	// If sliders are moved manually,
+	// deselect the configuration.
+	if (config === undefined) {
+		$configItem.removeClass(`is-active`);
+		return;
+	}
+
+	$configItem.removeClass(`is-active`);
+	$newConfigItem.addClass(`is-active`);
+
+	_config = config;
+	_chart.config = config;
+} 
 
 init();

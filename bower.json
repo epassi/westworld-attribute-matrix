@@ -6,6 +6,7 @@
     "jquery": "latest"
   },
   "devDependencies": {
-    "Snap.svg": "snap.svg#^0.4.1"
+    "Snap.svg": "snap.svg#^0.4.1",
+    "gsap": "^1.19.0"
   }
 }
