@@ -53,6 +53,7 @@ module.exports = function(grunt) {
 						"vendor/jquery/dist/jquery.min.js",
 						"vendor/Snap.svg/dist/snap.svg-min.js",
 						"vendor/gsap/src/minified/TweenLite.min.js",
+						"vendor/gsap/src/minified/easing/EasePack.min.js",
 						"resources/js/**/*.js", 
 						"!resources/js/all.min.js"]
 				}

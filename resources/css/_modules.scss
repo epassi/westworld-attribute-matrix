@@ -14,7 +14,7 @@
 		left: 0;
 		width: $nav-width;
 		bottom: 0;
-		padding: 5.0rem $nav-padding-side;
+		padding: 7.0rem $nav-padding-side;
 
 		.config {
 			position: relative;
@@ -109,7 +109,7 @@
 }
 @media (min-width: $vp-large-min) {
 	.chart {
-		left: $nav-width/2;
+		left: $nav-width/1.5;
 	}
 }
 

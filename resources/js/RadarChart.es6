@@ -243,10 +243,15 @@ class RadarChart {
 		this._config = index;
 
 		for (let [index, slider] of this._sliders.entries()) {
-			TweenLite.to(slider, 0.5, {
-				value: this._attributes[index].amount[this._config]
-			});		
-		}		
+			TweenLite.to(
+				slider,
+				0.5,
+				{
+					value: this._attributes[index].amount[this._config],
+					ease: Power2.easeOut
+				}
+			);		
+		}
 	}
 
 	get configs() {
