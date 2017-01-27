@@ -6,9 +6,18 @@ class AttributeSlider {
 		return Math.sqrt(Math.pow(drag.x, 2) + Math.pow(drag.y, 2));
 	}
 
+	static formatAmount(value) {
+		if (value >= AttributeSlider.MAX_VALUE) {
+			value = `MAX`;
+		}
+
+		return value;
+	}
+
 	static get SIZE() {return 14;} // pixels
-	static get SLIDE_EVENT() {return `slide`;};
-	static get CHANGE_EVENT() {return `change`;};
+	static get SLIDE_EVENT() {return `slide`;}
+	static get CHANGE_EVENT() {return `change`;}
+	static get MAX_VALUE() {return 20;}
 
 	constructor(parentChart, sliderID, angle, value, name) {
 		this.parentChart = parentChart;
@@ -40,13 +49,14 @@ class AttributeSlider {
 
 		// Create label.
 		// Do this after radius has been set.
-		let label = `<label class="attribute" id="label-${sliderID}">${name} <span class="amount">[${this.value}]</span></label>`;
+		let amount = AttributeSlider.formatAmount(Math.round(this.value));
+		let label = `<label class="attribute" id="label-${sliderID}">${name} <span class="amount">[${amount}]</span></label>`;
 		if (angle === 90) {
 			this._labelLocation = "top";
 		} else if (angle > 90 && angle < 270)	{
 			this._labelLocation = "left";
 			// Show amount on the left instead of the right.
-			label = `<label class="attribute" id="label-${sliderID}"><span class="amount">[${this.value}]</span> ${name}</label>`;
+			label = `<label class="attribute" id="label-${sliderID}"><span class="amount">[${amount}]</span> ${name}</label>`;
 		} else if (angle === 270) {
 			this._labelLocation = "bottom";
 		} else {
@@ -168,8 +178,9 @@ class AttributeSlider {
 
 		// Set value.
 		let dragRadiusRatio = (AttributeSlider.distanceFromCenter(correctedDrag) - this._radius.min) / (this._radius.max - this._radius.min);
+		let amount = AttributeSlider.formatAmount(Math.round(this._value));
 		this._value = Math.round(RadarChart.SCALE * dragRadiusRatio);
-		this.$label.find(`.amount`).text(`[${Math.round(this._value)}]`);
+		this.$label.find(`.amount`).text(`[${amount}]`);
 		this.placeLabel(); // Realigns the label as its width changes.
 
 		// Set vertex.
@@ -227,6 +238,13 @@ class AttributeSlider {
 		// Set label position.
 		let transform = `translate(${labelPosition.x}px, ${-labelPosition.y}px)`;
 		this.$label.css(`transform`, transform);
+
+		// Apply alert style for max value.
+		if (this.value >= AttributeSlider.MAX_VALUE) {
+			this.$label.addClass(`is-max`);	
+		} else {
+			this.$label.removeClass(`is-max`);	
+		}
 	}
 
 	get angle() {
@@ -289,7 +307,8 @@ class AttributeSlider {
 
 		// Set amount in label.
 		if (this.$label) {
-			this.$label.find(`.amount`).text(`[${Math.round(this._value)}]`);
+			let amount = AttributeSlider.formatAmount(Math.round(this._value));
+			this.$label.find(`.amount`).text(`[${amount}]`);
 			this.placeLabel();
 		}
 
